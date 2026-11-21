@@ -9,7 +9,7 @@ import { EMPTY_STAGE, WALK_MS } from './empty'
 import { facts } from './facts'
 
 // stage.tsx, pane.tsx and player.ts hold the same values: keep these lines identical.
-const stage = atom({ plugin: 'anthropicship', key: 'stage' } as const, EMPTY_STAGE, { shape: 'stage-3' })
+const stage = atom({ plugin: 'anthropicship', key: 'stage' } as const, EMPTY_STAGE, { shape: 'stage-4' })
 const frame = atom({ plugin: 'anthropicship', key: 'frame' } as const, 0, { shape: 'frame-1' })
 
 const BEAT_MS = 250
@@ -40,7 +40,8 @@ async function step($: EngineInterface): Promise<void> {
       ((s.move === 'entering' || s.move === 'leaving') && now - s.moveAt < WALK_MS + 300) ||
       (s.his !== 'desk' && now - s.hisMoveAt < WALK_MS + 300) ||
       now - s.bellAt < 1_800
-    const isReacting = now - s.moodAt < 1_800 || s.hisMood === 'heart' || s.herMood === 'heart'
+    const isReacting =
+      now - s.moodAt < 1_800 || now - s.driftAt < 1_500 || now - s.actAt < 2_000 || s.hisMood === 'heart' || s.herMood === 'heart'
 
     if (beats % beatsPerFrame(isWalking, isReacting, facts.isWorking) !== 0) return
     await update($, frame, n => (n + 1) % 1_000_000)

@@ -34,6 +34,14 @@ test('numbered or bulleted model lines still read', () => {
   ])
 })
 
+test('a stage cue written as a spoken line is still the cue', () => {
+  expect(parseScene(['ruby: (ruby arrives)', 'ruby: hi', 'ruby: (ruby leaves)'].join(String.fromCodePoint(10)), true)).toEqual([
+    { cue: 'arrive' },
+    { who: 'ruby', text: 'hi' },
+    { cue: 'leave' },
+  ])
+})
+
 test('his answer as a bullet list stays his, and a spoken "(seen)" is the cue', () => {
   const scene = parseScene('claude: Here is a summary:\n- I was running the tests.\n- I did not reply.\nruby: (seen)', true)
 

@@ -88,8 +88,13 @@ export function parseScene(text: string, isStrict: boolean): Scene | null {
 
     if (words === '') continue
     if (isStrict && BANNED.some(rule => rule.test(words))) return null
-    if (CUE.test(words)) {
-      steps.push({ cue: 'seen' }) // "ruby: (seen)" and the like
+    const spokenCue = CUE.exec(words)
+
+    if (spokenCue !== null) {
+      // "ruby: (seen)", "ruby: (ruby arrives)": a stage cue written as a line.
+      const what = (spokenCue[1] ?? '').toLowerCase()
+
+      steps.push({ cue: what === 'seen' ? 'seen' : what.endsWith('arrives') ? 'arrive' : 'leave' })
       continue
     }
     steps.push({ who: name === 'human' ? 'user' : (name as 'ruby' | 'claude' | 'user'), text: words })

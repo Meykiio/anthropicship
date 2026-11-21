@@ -49,6 +49,11 @@ export function shortDate(ms: number): string {
   return `${WEEKDAYS[d.getDay()]?.slice(0, 3) ?? ''} ${MONTHS[d.getMonth()] ?? ''} ${d.getDate()}`
 }
 
+/** "13:44". */
+export function shortTime(ms: number): string {
+  return localTime(ms).text
+}
+
 /** A calendar day key, for counting per day. */
 export function dayKey(nowMs: number): string {
   const d = new Date(nowMs)

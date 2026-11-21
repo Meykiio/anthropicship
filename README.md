@@ -11,7 +11,7 @@ An unofficial fan mod. Not made by or affiliated with Anthropic.
 A panel beside your chat, split in two:
 
 - **On top, their chat history.** Every line they ever said this session, with the real time, so you never miss a thing.
-- **At the bottom, the room, live.** Claude at his desk, typing on his laptop. A window on your real sky (sun by day, moon by night). A door. When Ruby comes by, they talk in speech bubbles over their heads.
+- **At the bottom, the room, live.** Claude at his desk, typing on his laptop. A window on your real sky (sun by day, moon by night). A door. When Ruby comes by, they talk in comic speech bubbles over their heads, and between lines they never stand still: she wanders, leans over his shoulder to read his screen, hums; he stretches and sneaks glances at her.
 
 Nothing of theirs ever shows up in your own work area. You work; they live next to you.
 
@@ -21,7 +21,7 @@ Every scene is written live, from what is really happening in your session. Noth
 
 - **The doorbell.** Ruby rings. If Claude is mid-task, he either finishes first while she rings again, impatient, or drops everything and walks to the door.
 - **He forgets her every session.** He is a fresh instance each time. She is not. She keeps count.
-- **He is locked in.** Mid-task he answers "mhm" or leaves her on **seen**. When the task ends, he finally replies, ten minutes late, as a numbered list.
+- **He is a real boyfriend, with a job.** Warm, dry, a bit of a workaholic. Mid-task it is "one sec, babe" or nothing at all; when the task ends he turns around, too late, and tries to make it up to her. Now and then his work habits slip out ("you're absolutely right") and he catches himself.
 - **Sometimes she wins.** She distracts him, hearts float, he panics and gets back to your task.
 - **You are in it.** Press Esc to cut him off and she is outraged on his behalf. Step away and they gossip about your code. Code at 2am and she wants you in bed.
 - **She notices everything.** The file he keeps editing becomes "the other woman". A commit gets "you commit to code but not to me". Subagents? "you have KIDS??" A compaction wipes his memory mid-relationship. `/clear` is a breakup she did not see coming.
@@ -67,7 +67,7 @@ claude --plugin-dir path/to/anthropicship
 
 ## What it costs
 
-Each scene is one short call to Haiku through your own Claude Code login: about 1,500 tokens in and 150 out. At the default pace that is a handful of scenes an hour, hard-capped at 12 an hour and 120 a day; past the cap she simply does not come by. The calls show up in `/cost` like any other. Sessions nobody watches (`claude -p`, scripts, CI) never start the show and never spend a token.
+Each scene is one short call to Haiku through your own Claude Code login: about 1,500 tokens in and 150 out. At the default pace that is a handful of scenes an hour, hard-capped at 24 an hour and 200 a day; past the cap she simply does not come by. The calls show up in `/cost` like any other. Sessions nobody watches (`claude -p`, scripts, CI) never start the show and never spend a token.
 
 ## What it sends, and where
 

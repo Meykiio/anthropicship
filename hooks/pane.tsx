@@ -12,18 +12,18 @@ import { lifeLine } from './life'
 import { COLOR, WALL, bubbles } from './look'
 import { mind } from './memory'
 import { rasterOfGrid, svgOfGrid } from './paint'
-import { ROOM_MAX, ROOM_MIN, drawRoom, herPlace, hisPlace } from './room'
+import { ROOM_MAX, ROOM_MIN, drawRoom } from './room'
 import { localTime } from './time'
 
 // player.ts and animate.ts hold the same values: keep these lines identical.
-const stage = atom({ plugin: 'anthropicship', key: 'stage' } as const, EMPTY_STAGE, { shape: 'stage-3' })
+const stage = atom({ plugin: 'anthropicship', key: 'stage' } as const, EMPTY_STAGE, { shape: 'stage-4' })
 const frame = atom({ plugin: 'anthropicship', key: 'frame' } as const, 0, { shape: 'frame-1' })
 const log = atom({ plugin: 'anthropicship', key: 'log' } as const, [], { shape: 'log-1' })
 
 export const PANE = 'room'
 const TITLE = 'Claude & Ruby'
-/** Rows the bottom part always keeps: typing line, two bubble rows, the room, a margin. */
-const SCENE_ROWS = 1 + 2 + 12 + 1
+/** Rows the bottom part always keeps: the room (bubbles included) and a margin. */
+const SCENE_ROWS = 14 + 1
 const NAMES = { ruby: 'ruby', claude: 'Claude', user: 'you' } as const
 
 /** Opens the panel. Resolves whether a surface shows it now. */
@@ -43,8 +43,9 @@ export function registerPane(on: On): void {
     const nowMs = await $.clock.now()
     const width = Math.max(ROOM_MIN, Math.min(ROOM_MAX, e.props.bodyColumns))
     const life = mind.memory.life
-    const room = drawRoom({ stage: s, nowMs, frame: tick, width, hour: localTime(nowMs).hour, isWorking: facts.isWorking, life })
     const said = bubbles(s)
+    const speech = { his: said.his, hers: said.hers, last: said.last, typing: s.typing }
+    const room = drawRoom({ stage: s, nowMs, frame: tick, width, hour: localTime(nowMs).hour, isWorking: facts.isWorking, life, speech })
 
     // The history: the newest lines that fit above the scene, counting the rows a long line wraps to.
     const budget = Math.max(2, (e.viewport?.rows ?? 34) - SCENE_ROWS - 2)
@@ -72,50 +73,26 @@ export function registerPane(on: On): void {
       </Box>
     )
 
-    // The live scene: each bubble sits over its speaker, wherever they stand.
-    const hisX = hisPlace(s, nowMs, width).x
-    const herX = herPlace(s, nowMs, width).x
-    const hisText = said.his ?? ' '
-    const herText = said.hers === null || herX === null ? ' ' : said.hers
-    const split = herX === null ? width : Math.max(hisX + 10, herX - 2)
-    const speech = (
-      <Box flexDirection="row" width={width}>
-        <Box width={split} paddingLeft={Math.max(0, Math.min(hisX, split - 24))}>
-          <Text color={COLOR.claude} dimColor={said.last !== 'claude'} italic={said.his === 'seen'} maxLines={2} wrap="wrap">
-            {hisText}
-          </Text>
-        </Box>
-        <Box flexGrow={1}>
-          <Text color={COLOR.ruby} dimColor={said.last !== 'ruby'} maxLines={2} wrap="wrap">
-            {herText}
-          </Text>
-        </Box>
-      </Box>
-    )
-
     let picture: RenderElement
 
     if (e.surface === 'terminal') {
       const { Raster } = $.ui.resolve(e)
-      const cells = rasterOfGrid(room.grid, WALL, room.marks)
+      const cells = rasterOfGrid(room.grid, WALL, room.marks, room.overlays)
 
       picture = <Raster key="room" columns={cells.columns} rows={cells.rows} cells={cells.cells} />
     } else if ('Svg' in ui) {
       const { Svg } = ui
 
-      picture = <Svg source={svgOfGrid(room.grid, 5, WALL, room.marks)} alt={s.move === 'away' ? 'Claude at his desk.' : 'Claude and Ruby in their room.'} />
+      picture = <Svg source={svgOfGrid(room.grid, 8, WALL, room.marks, room.overlays)} alt={s.move === 'away' ? 'Claude at his desk.' : 'Claude and Ruby in their room.'} />
     } else {
       picture = <Text dimColor>{s.move === 'away' ? 'Claude is at his desk.' : 'Ruby is here.'}</Text>
     }
-    const typing = s.typing === 'ruby' || s.typing === 'claude' ? `${NAMES[s.typing]} is typing...` : ' '
 
     return (
       <Box flexDirection="column" height={e.viewport?.rows}>
         <Text dimColor wrap="truncate-end">{lifeLine(mind.memory, nowMs)}</Text>
         {history}
         <Box flexDirection="column" flexShrink={0} marginTop={1}>
-          <Text dimColor italic wrap="truncate-end">{typing}</Text>
-          {speech}
           {picture}
         </Box>
       </Box>

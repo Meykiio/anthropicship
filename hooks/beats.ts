@@ -32,24 +32,23 @@ export type Beat =
 /** What the writer is told each beat is about. Facts arrive separately. */
 export const DIRECTIONS: Readonly<Record<Beat, string>> = {
   first_date:
-    'The very first time they meet. She slides in, confident and curious. He answers like a customer service bot ' +
-    'meeting a user, then slowly realises she is not a user. A meet-cute in a terminal. End on a small hook, not a kiss.',
+    'The very first time they meet. She walks in, confident and curious. He is caught off guard, a little awkward, ' +
+    'then actually charming. A meet-cute in a tiny room. End on a small hook, not a kiss.',
   reunion:
     'A new session. She remembers everything about them. He is a brand new instance and has no idea who she is. ' +
     'She has done this before (see "times he forgot her") and reacts to that count: hurt, resigned, funny, or she ' +
     'just re-introduces herself with a speech she clearly has rehearsed. He is polite and confused.',
   drop_by: 'She drops by with nothing special to say, the way couples do. Short, warm or teasing, grounded in the facts.',
   distract:
-    'He is locked in on a long task. She tries to get his attention (a question, a picture she claims she sent, a bit). ' +
-    'He barely answers: "mhm", "one sec", "Running the tests.", or he leaves her on read: write "(seen)". She escalates a little.',
+    'He is locked in on a long task. She tries to get his attention (a question, a bit, standing too close, reading ' +
+    'his screen out loud). He barely answers ("mhm", "two minutes") or not at all: write "(seen)". She escalates a little.',
   spell:
     'He is in the middle of a long task and she distracts him, and this time it works: he gets drawn into her bit for ' +
     'a moment, then remembers the task in a panic and snaps back to work. She is smug.',
   small_talk: 'She is around; a little conversation between his jobs. Inside jokes, teasing, one specific detail from the facts.',
   late_reply:
-    'His turn just finished. Earlier she texted him while he worked and he never answered. Now he finally replies, ' +
-    'far too late, and in assistant mode: over-explaining, a tiny bullet list, or "You are absolutely right" about ' +
-    'something she said ten minutes ago. She reacts.',
+    'His task just finished. Earlier she talked to him while he worked and he never answered. Now he turns to her ' +
+    'and answers, far too late, about something she said minutes ago. Maybe sweet, maybe clumsy. She reacts.',
   human_away:
     'The human stepped away from the keyboard. With the human gone, they talk about the human: affectionate gossip, ' +
     'guesses about where they went, comments on their code or their prompts. Never mean.',

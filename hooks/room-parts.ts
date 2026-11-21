@@ -55,6 +55,16 @@ export function typing(map: string[], frame: number): string[] {
   return map
 }
 
+/** Arms up: a big stretch at the desk. */
+export function stretching(map: string[]): string[] {
+  const body = map[4]?.includes('R') ? 'R' : 'H'
+
+  for (const r of [3, 4, 5]) map[r] = `${body}${body}${(map[r] ?? '').slice(2, 14)}${body}${body}`
+  for (const r of [6, 7]) map[r] = `..${(map[r] ?? '').slice(2, 14)}..`
+
+  return map
+}
+
 /** Her legs scissor as she walks. */
 export function walking(map: string[], frame: number, body: 'H' | 'R'): string[] {
   const legs = (frame % 2 === 0 ? '..#...#..#...#..' : '...#.#....#.#...').replaceAll('#', body)

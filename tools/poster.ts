@@ -32,7 +32,8 @@ const history: readonly [string, string, string][] = [
 ]
 
 const stage = { ...EMPTY_STAGE, move: 'here' as const, moveAt: now - 60_000, herMood: 'mad' as const, moodAt: now - 200 }
-const room = drawRoom({ stage, nowMs: now, frame: 2, width: WIDTH, hour: 21, isWorking: true, life: { chapter, isApart: false, kids } })
+const speech = { his: 'Which name would you like me to use?', hers: "bug. it's literally on the door", last: 'ruby' as const, typing: null }
+const room = drawRoom({ stage, nowMs: now, frame: 2, width: WIDTH, hour: 21, isWorking: true, life: { chapter, isApart: false, kids }, speech })
 const who = (w: string): string =>
   w === 'stage' ? '' : `<b style="color:${w === 'ruby' ? COLOR.ruby : COLOR.claude}">${w === 'ruby' ? 'ruby' : 'Claude'}</b>  `
 const rows = history
@@ -49,10 +50,7 @@ const html = `<!doctype html><html><head><meta charset="utf-8"><style>
 </style></head><body><div class="panel">
   <div class="head">Claude &amp; Ruby . day 9 . ${chapter}${kids > 0 ? ` . ${kids} kid` : ''}</div>
   <div class="history">${rows}</div>
-  <div class="dim">ruby is typing...</div>
-  <div class="bubbles"><div style="width:${23 * SCALE}px;padding-left:${21 * SCALE}px;color:${COLOR.claude};opacity:.55">Which name?</div>
-  <div style="color:${COLOR.ruby}">bug.</div></div>
-  ${svgOfGrid(room.grid, SCALE, WALL, room.marks)}
+  ${svgOfGrid(room.grid, SCALE, WALL, room.marks, room.overlays)}
 </div></body></html>`
 
 writeFileSync(out, html)

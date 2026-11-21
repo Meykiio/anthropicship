@@ -12,7 +12,7 @@ import type { Scene } from './script'
 import { SETTINGS } from './settings'
 
 // stage.tsx, pane.tsx and animate.ts hold the same values: keep these lines identical.
-const stage = atom({ plugin: 'anthropicship', key: 'stage' } as const, EMPTY_STAGE, { shape: 'stage-3' })
+const stage = atom({ plugin: 'anthropicship', key: 'stage' } as const, EMPTY_STAGE, { shape: 'stage-4' })
 const log = atom({ plugin: 'anthropicship', key: 'log' } as const, [], { shape: 'log-1' })
 
 const LOG_LIMIT = 120
@@ -121,6 +121,7 @@ async function enter($: EngineInterface, hasKeys: boolean): Promise<void> {
     await wait($, WALK_MS)
     await moveHim($, 'door')
   }
+  await setStage($, s => ({ ...s, drift: 0, driftFrom: 0 }))
   await moveHer($, 'entering', opensHimself ? 'none' : 'alarm')
   await note($, 'stage', 'ruby walked in')
   await wait($, 900)
@@ -133,6 +134,11 @@ async function enter($: EngineInterface, hasKeys: boolean): Promise<void> {
 /** She walks back out through the door. */
 async function leave($: EngineInterface): Promise<void> {
   show.isHere = false
+  // Back to her spot first, so the walk out starts from where she stands.
+  const now = await $.clock.now()
+
+  await setStage($, s => ({ ...s, drift: 0, driftFrom: s.drift, driftAt: now }))
+  await wait($, 1_200)
   await moveHer($, 'leaving', 'none')
   await note($, 'stage', 'ruby left')
   await wait($, WALK_MS)

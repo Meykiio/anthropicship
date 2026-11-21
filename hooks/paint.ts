@@ -1,6 +1,7 @@
 // Turns a pixel map into what a surface draws: half-block cells for a
 // terminal Raster, crisp squares for an Svg everywhere else.
 
+import type { Overlay } from './bubbles'
 import { inkOf } from './sprites'
 import type { Pixels } from './sprites'
 
@@ -39,6 +40,7 @@ export function rasterOfGrid(
   grid: readonly (readonly (string | null)[])[],
   background: string,
   marks: readonly Mark[] = [],
+  overlays: readonly Overlay[] = [],
 ): { columns: number; rows: number; cells: string } {
   const columns = grid[0]?.length ?? 0
   const rows = Math.ceil(grid.length / 2)
@@ -63,6 +65,19 @@ export function rasterOfGrid(
     }
   }
 
+  // Bubbles go last, over everything. An empty background keeps the room's own color under the cell.
+  for (const o of overlays) {
+    ;[...o.text].forEach((ch, i) => {
+      const x = o.col + i
+
+      if (o.row < 0 || o.row >= rows || x < 0 || x >= columns) return
+      const at = (o.row * columns + x) * 3
+      const under = o.bg === '' ? (words[at + 2] ?? bg) : rgb(o.bg)
+
+      words.set([ch.codePointAt(0) ?? SPACE, rgb(o.fg), under], at)
+    })
+  }
+
   return { columns, rows, cells: toBase64(new Uint8Array(words.buffer)) }
 }
 
@@ -72,6 +87,7 @@ export function svgOfGrid(
   scale: number,
   background: string,
   marks: readonly Mark[] = [],
+  overlays: readonly Overlay[] = [],
 ): string {
   const width = (grid[0]?.length ?? 0) * scale
   const height = grid.length * scale
@@ -90,6 +106,7 @@ export function svgOfGrid(
     }
   })
   for (const mark of marks) parts.push(markText(mark, scale))
+  for (const o of overlays) parts.push(overlaySvg(o, scale))
 
   return svgDocument(width, height, parts)
 }
@@ -100,6 +117,22 @@ function markText(mark: Mark, scale: number): string {
   return (
     `<text x="${(mark.column + 0.5) * scale}" y="${(mark.row ?? 0) * 2 * scale + size * 0.85}" font-size="${size}" text-anchor="middle" ` +
     `font-family="monospace" fill="${mark.color}">${escapeXml(mark.char)}</text>`
+  )
+}
+
+/** A bubble row in SVG: its box, then its text stretched to the cells it covers. */
+function overlaySvg(o: Overlay, scale: number): string {
+  const x = o.col * scale
+  const y = o.row * 2 * scale
+  const w = [...o.text].length * scale
+  const h = 2 * scale
+
+  if (o.text === String.fromCodePoint(0x2580)) return `<rect x="${x}" y="${y}" width="${scale}" height="${scale}" fill="${o.fg}"/>`
+
+  return (
+    `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${o.bg}"/>` +
+    `<text x="${x}" y="${y + h * 0.78}" font-size="${h * 0.8}" font-family="monospace" textLength="${w}" ` +
+    `lengthAdjust="spacingAndGlyphs" fill="${o.fg}" xml:space="preserve">${escapeXml(o.text)}</text>`
   )
 }
 

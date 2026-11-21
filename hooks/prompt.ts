@@ -8,7 +8,7 @@ import { clip, facts, rivalOf } from './facts'
 import { MUST, storySoFar } from './life'
 import type { Milestone } from './life'
 import type { Memory } from './memory'
-import { localTime, timeContext } from './time'
+import { localTime, shortTime, timeContext } from './time'
 
 type Key =
   | 'time' | 'forgot' | 'ignored' | 'interrupts' | 'commits' | 'compactions' | 'working' | 'doing'
@@ -103,7 +103,13 @@ export function askFor(beat: Beat, m: Memory, nowMs: number, isArriving: boolean
   const details = FACTS_FOR[beat]
     .map(key => factLine(key, m, nowMs, said))
     .filter((line): line is string => line !== null)
-  const parts = [timeContext(nowMs, m.lastTalkMs), story.join(' ')]
+  const memoryNote =
+    beat === 'reunion' || beat === 'first_date'
+      ? 'NEW SESSION: he is a fresh instance and does not remember her yet. This is the only scene where he forgets.'
+      : facts.firstTalkMs > 0
+        ? `THIS SESSION: they have been together since ${shortTime(facts.firstTalkMs)}. He knows exactly who she is and remembers everything said today.`
+        : 'He knows exactly who she is.'
+  const parts = [timeContext(nowMs, m.lastTalkMs), story.join(' '), memoryNote]
 
   if (details.length > 0) parts.push(`A DETAIL YOU MAY USE (optional, once at most):\n- ${details.join('\n- ')}`)
   if (m.lastScene.length > 0) parts.push(`PREVIOUS SCENE (do not repeat its jokes or details):\n${m.lastScene.join('\n')}`)

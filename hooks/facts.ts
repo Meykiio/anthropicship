@@ -20,6 +20,8 @@ export type Facts = {
   lastActivityMs: number
   sessionStartMs: number
   agents: number
+  /** When they first talked in this session (epoch ms), 0 before: from then on he knows her. */
+  firstTalkMs: number
   model: string
 }
 
@@ -35,6 +37,7 @@ export const facts: Facts = {
   lastActivityMs: 0,
   sessionStartMs: 0,
   agents: 0,
+  firstTalkMs: 0,
   model: '',
 }
 

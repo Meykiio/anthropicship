@@ -29,6 +29,13 @@ export type Stage = {
   hisMoveAt: number
   /** When the doorbell last rang (epoch ms), 0 for never: the door shakes for a moment after. */
   bellAt: number
+  /** Between lines she moves about: an offset from her spot (pixels), easing from `driftFrom` since `driftAt`. */
+  drift: number
+  driftFrom: number
+  driftAt: number
+  /** A small thing he does between lines, since `actAt`. */
+  act: 'none' | 'stretch' | 'look'
+  actAt: number
   /** Who is typing right now, if anyone. */
   typing: Speaker | null
   /** The last few lines, oldest first. Empty between scenes. */

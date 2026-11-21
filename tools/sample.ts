@@ -54,15 +54,14 @@ const memory = {
 }
 
 const beats: readonly [Beat, boolean, string][] = [
-  ['propose', false, ''],
-  ['wedding', false, ''],
-  ['breakup', false, ''],
-  ['make_up', true, ''],
-  ['move_in', true, ''],
-  ['baby', false, ''],
+  ['small_talk', false, ''],
+  ['distract', false, ''],
+  ['late_reply', false, ''],
   ['drop_by', true, ''],
-  ['spell', false, ''],
+  ['reunion', true, ''],
 ]
+
+facts.firstTalkMs = now - 25 * 60_000
 
 for (const [beat, isArriving, said] of beats) {
   const isFirst = beat === 'first_date'

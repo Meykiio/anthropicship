@@ -128,6 +128,7 @@ async function perform($: EngineInterface, beat: Beat, scene: Scene, isArriving:
   const nowMs = await $.clock.now()
 
   session.played[beat] = (session.played[beat] ?? 0) + 1
+  if (facts.firstTalkMs === 0) facts.firstTalkMs = nowMs
   const life = mind.memory.life
   const hasKeys = isAtLeast(life, 'living together') && !life.isApart
 

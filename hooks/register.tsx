@@ -5,6 +5,7 @@ import type { EngineInterface, Register } from 'claude-code'
 
 import { registerCommand, registerShip } from './commands'
 import { startAnimation } from './animate'
+import { startIdle } from './idle'
 import { openRoom, registerPane } from './pane'
 import { cue } from './conductor'
 import { describeTool, facts, isCommitCommand, isTestCommand, rivalOf } from './facts'
@@ -27,7 +28,7 @@ async function newSession($: EngineInterface): Promise<void> {
   const nowMs = await $.clock.now()
 
   remember($, m => meetAgain(m, nowMs, Math.random))
-  Object.assign(facts, { sessionStartMs: nowMs, lastActivityMs: nowMs, edits: {}, failStreak: 0, agents: 0 })
+  Object.assign(facts, { sessionStartMs: nowMs, lastActivityMs: nowMs, edits: {}, failStreak: 0, agents: 0, firstTalkMs: 0 })
   rivalsCued = new Set()
 }
 
@@ -49,6 +50,7 @@ export const register: Register = on => {
       await registerCommand($)
       $.clock.every(SETTINGS.tickMs, () => void cue($, 'tick'))
       startAnimation($)
+      startIdle($)
       // The room opens beside the chat wherever it can be a sidebar.
       if (mind.memory.prefs.isOn) await openRoom($).catch(() => false)
       // A moment after the session opens, she walks in. He will not know her.
