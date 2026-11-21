@@ -55,6 +55,7 @@ const memory = {
 
 const beats: readonly [Beat, boolean, string][] = [
   ['propose', false, ''],
+  ['wedding', false, ''],
   ['breakup', false, ''],
   ['make_up', true, ''],
   ['move_in', true, ''],

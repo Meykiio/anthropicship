@@ -1,7 +1,7 @@
 {
   "name": "anthropicship",
-  "version": "0.1.0",
-  "description": "Claude has a girlfriend now. Ruby lives above your prompt, texts him while he works, and gets ignored, a lot. An unofficial fan mod.",
+  "version": "0.2.0",
+  "description": "Claude has a girlfriend now. Ruby lives in a pixel room beside your chat, rings the doorbell while he works, and slowly builds a life with him. An unofficial fan mod.",
   "author": { "name": "Meykiio" },
   "license": "MIT",
   "keywords": ["fun", "companion", "pixel-art", "mod"],

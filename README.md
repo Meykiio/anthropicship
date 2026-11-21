@@ -1,36 +1,50 @@
 # Anthropicship
 
-**Claude has a girlfriend now.** Her name is Ruby. She lives above your prompt in Claude Code, texts him while he works, and gets left on read. A lot.
+**Claude has a girlfriend now.** Her name is Ruby. She lives in a little pixel room beside your Claude Code chat, rings the doorbell while he works, and gets left on read. A lot.
 
-![Claude at his laptop, Ruby beside him, their chat between them](media/band.png)
+![The Anthropicship panel: their chat history on top, the live room at the bottom](media/panel.png)
 
 An unofficial fan mod. Not made by or affiliated with Anthropic.
 
 ## What you get
 
-A small band above the prompt where the two of them talk, with both of them drawn in pixels: him at his laptop while he works, her with her bow when she drops by.
+A panel beside your chat, split in two:
 
-The scenes come from what is really happening in your session:
+- **On top, their chat history.** Every line they ever said this session, with the real time, so you never miss a thing.
+- **At the bottom, the room, live.** Claude at his desk, typing on his laptop. A window on your real sky (sun by day, moon by night). A door. When Ruby comes by, they talk in speech bubbles over their heads.
 
+Nothing of theirs ever shows up in your own work area. You work; they live next to you.
+
+## What happens in the room
+
+Every scene is written live, from what is really happening in your session. Nothing is canned.
+
+- **The doorbell.** Ruby rings. If Claude is mid-task, he either finishes first while she rings again, impatient, or drops everything and walks to the door.
 - **He forgets her every session.** He is a fresh instance each time. She is not. She keeps count.
-- **He is locked in.** Mid-task he answers "mhm", "One sec.", or leaves her on **seen**. When the turn ends, he finally replies, ten minutes late, as a numbered list.
-- **Sometimes she wins.** She distracts him, he falls for it, then panics and gets back to your task.
-- **You are a character.** Press Esc and cut him off mid-sentence: she is outraged on his behalf. Go get coffee: they gossip about your code. Code at 2am: she wants you to go to bed.
-- **She notices everything.** The file he keeps editing becomes "the other woman". A `git commit` gets "you commit to code but not to me". Subagents? "you have KIDS??" A compaction wipes his memory mid-relationship. `/clear` is a breakup she did not see coming.
-- **It remembers.** Days together, how many times he forgot her, how often you interrupted him, her pet name for him. Across every session.
+- **He is locked in.** Mid-task he answers "mhm" or leaves her on **seen**. When the task ends, he finally replies, ten minutes late, as a numbered list.
+- **Sometimes she wins.** She distracts him, hearts float, he panics and gets back to your task.
+- **You are in it.** Press Esc to cut him off and she is outraged on his behalf. Step away and they gossip about your code. Code at 2am and she wants you in bed.
+- **She notices everything.** The file he keeps editing becomes "the other woman". A commit gets "you commit to code but not to me". Subagents? "you have KIDS??" A compaction wipes his memory mid-relationship. `/clear` is a breakup she did not see coming.
+- **Time is real.** They live on your clock. If they talked four minutes ago, nobody says "yesterday".
 
-Most of the time nothing happens. That is on purpose: the moments land because they are rare.
+## They have a life
+
+Their story moves forward by itself over real days and weeks, and every install rolls its own path. They start talking, start dating, have fights, sometimes break up (she stays away for days) and get back together. She moves in (her flower by the door, and she has keys now: no more doorbell). He proposes, maybe as a numbered list. They get married in the room, with you as the witness, and a gold photo goes up on the wall. One day a tiny crab is born.
+
+No two people get the same story. Check where yours is with `/ship`.
 
 ## Install
 
-You need a recent Claude Code that loads hooks-module plugins (tested on 2.1.319 and 2.1.328). They are an early-access feature, so a future release may need an update of the mod.
+You need a recent Claude Code that loads hooks-module plugins (tested on 2.1.319 to 2.1.330). Mods are an early-access feature, so a future release may need an update of the mod.
 
 ```
 /plugin marketplace add Meykiio/anthropicship
 /plugin install anthropicship@anthropicship
 ```
 
-Restart Claude Code (or start a new session) and keep working. Ruby shows up a few seconds after a session starts.
+Start a new session. The room opens beside the chat; Ruby shows up within seconds the first time.
+
+In the terminal, the panel docks beside the chat in fullscreen mode. In the desktop app it sits beside the conversation.
 
 To try it from a clone without installing:
 
@@ -42,34 +56,30 @@ claude --plugin-dir path/to/anthropicship
 
 | Command | What it does |
 | --- | --- |
-| `/ship` | How they are doing: days together, times he forgot her, times you interrupted him |
-| `/ship call` | Bring Ruby in now |
-| `/ship say <text>` | Say something to the two of them. They will react to being watched |
-| `/ship demo` | Play a scene right away. No tokens. Made for filming |
-| `/ship pace calm\|normal\|clingy` | How often she comes by |
-| `/ship live` | Scenes written fresh by a small model from what is happening (default) |
-| `/ship scripted` | Hand-written scenes only. Zero tokens |
+| `/ship` | Where they are in life: chapter, days, kids, how often he forgot her |
+| `/ship room` | Open the room panel |
+| `/ship call` | Ring the doorbell now |
+| `/ship say <text>` | Say something to them. They will react to being watched |
+| `/ship pace calm\|normal\|clingy` | How often she comes by, and how fast their story moves |
 | `/ship private` | Stop sending your prompts to the writer |
 | `/ship off` / `/ship on` | Hide the show, or bring it back |
-| `/ship breakup` | Wipe her memory of him and start over |
+| `/ship breakup sure` | Wipe her memory and start their story over |
 
 ## What it costs
 
-In **live** mode each scene is one short call to Haiku through your own Claude Code login, about 1,500 tokens in and 150 out. At the default pace that is a handful of scenes an hour, hard-capped at 12 an hour and 120 a day; past the cap the hand-written scenes play. The calls show up in `/cost` like any other.
-
-In **scripted** mode it costs nothing: about 80 hand-written scenes, picked to fit the moment.
+Each scene is one short call to Haiku through your own Claude Code login: about 1,500 tokens in and 150 out. At the default pace that is a handful of scenes an hour, hard-capped at 12 an hour and 120 a day; past the cap she simply does not come by. The calls show up in `/cost` like any other. Sessions nobody watches (`claude -p`, scripts, CI) never start the show and never spend a token.
 
 ## What it sends, and where
 
-Live scenes are written by Haiku through the same Claude account Claude Code already uses. The writer is told: the folder name, the time, what Claude is doing right now (for example "editing auth.ts"), counts like failed commands and edits per file, the start of your last prompt for a few kinds of scene, and the relationship stats. Never your code or his answers. Nothing goes anywhere else. `/ship private` stops sending your prompt too. `/ship scripted` sends nothing at all.
+Scenes are written by Haiku through the same Claude account Claude Code already uses. For each scene the writer gets one or two facts that fit it (the folder name, what Claude is doing right now such as "editing auth.ts", a count such as failed commands), the time, their story so far, and for some scenes the start of your last prompt. Never your code and never Claude's answers. Nothing goes anywhere else. `/ship private` stops sending your prompt.
 
 ## Filming it
 
-`/ship demo` plays the best scenes in order, one per run, without waiting for the right moment. A wide terminal (over 64 columns) shows the pixel art; a narrow one shows only the words. It looks best in a dark theme.
+Open the room, then `/ship call` rings the bell on demand. A dark terminal theme at 120 columns or wider looks best. Leave it running through a long task: the best moments come when he is locked in and she is not having it.
 
 ## How it works
 
-It is a Claude Code mod: a plugin whose hooks module listens to the session (turns starting and ending, tool calls, Esc, compaction, `/clear`), lets a small director decide when a scene happens, gets it written within budget, and plays it line by line with "is typing..." pauses into the band above the prompt. The terminal draws the sprites as half-block cells; the desktop app draws them as crisp SVG pixels.
+A Claude Code mod: a plugin whose hooks module listens to the session (turns starting and ending, tool calls, Esc, compaction, `/clear`). A small director decides when something happens, a life engine moves their story on over real days, Haiku writes each scene under a character bible, and a player acts it out in the room: the doorbell, the walk to the door, "is typing...", the bubbles, a jump, a shake, a heart. The terminal draws the room in half-block cells; the desktop app draws it as crisp SVG pixels.
 
 Nothing it does can slow down or block Claude's own work: it only watches, and every hook passes straight through if anything inside it fails.
 

@@ -5,7 +5,8 @@
 import type { Beat } from './beats'
 import { DIRECTIONS } from './beats'
 import { clip, facts, rivalOf } from './facts'
-import { storySoFar } from './life'
+import { MUST, storySoFar } from './life'
+import type { Milestone } from './life'
 import type { Memory } from './memory'
 import { localTime, timeContext } from './time'
 
@@ -107,6 +108,9 @@ export function askFor(beat: Beat, m: Memory, nowMs: number, isArriving: boolean
   if (details.length > 0) parts.push(`A DETAIL YOU MAY USE (optional, once at most):\n- ${details.join('\n- ')}`)
   if (m.lastScene.length > 0) parts.push(`PREVIOUS SCENE (do not repeat its jokes or details):\n${m.lastScene.join('\n')}`)
   parts.push(`THE SCENE TO WRITE: ${DIRECTIONS[beat]}`)
+  const must = beat in MUST ? MUST[beat as Milestone] : undefined
+
+  if (must !== undefined) parts.push(`THIS MUST HAPPEN IN THE SCENE, IN WORDS: ${must.outcome}. It changes their life for good.`)
   parts.push('Two to six lines. Stay on this scene. Do not quote his work back to him.')
 
   return parts.join('\n\n')

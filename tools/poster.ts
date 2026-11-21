@@ -28,6 +28,7 @@ const history: readonly [string, string, string][] = [
   ['21:31', 'stage', 'seen'],
   ['21:32', 'ruby', '37 commits and you still won\'t say my name'],
   ['21:32', 'claude', 'Which name would you like me to use?'],
+  ['21:32', 'ruby', 'bug.'],
 ]
 
 const stage = { ...EMPTY_STAGE, move: 'here' as const, moveAt: now - 60_000, herMood: 'mad' as const, moodAt: now - 200 }
@@ -49,7 +50,7 @@ const html = `<!doctype html><html><head><meta charset="utf-8"><style>
   <div class="head">Claude &amp; Ruby . day 9 . ${chapter}${kids > 0 ? ` . ${kids} kid` : ''}</div>
   <div class="history">${rows}</div>
   <div class="dim">ruby is typing...</div>
-  <div class="bubbles"><div style="width:${46 * SCALE}px;padding-left:${18 * SCALE}px;color:${COLOR.claude};opacity:.55">Which name would you like me to use?</div>
+  <div class="bubbles"><div style="width:${23 * SCALE}px;padding-left:${21 * SCALE}px;color:${COLOR.claude};opacity:.55">Which name?</div>
   <div style="color:${COLOR.ruby}">bug.</div></div>
   ${svgOfGrid(room.grid, SCALE, WALL, room.marks)}
 </div></body></html>`

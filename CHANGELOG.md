@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.2.0 (2026-11-21), the room
+
+Completed
+- A panel beside the chat, as he sketched it: chat history on top with real times, the live room pinned at the
+  bottom with speech bubbles over their heads. The band above the prompt is gone.
+- The room: window on the real sky, plant, desk and laptop, door. He types, blinks, jumps; she walks, shakes,
+  floats hearts. Terminal half-block cells and desktop SVG from one pixel grid.
+- The doorbell: mid-task he finishes first (she rings again, then lets herself in after 4 minutes) or drops
+  everything and walks to the door. Once she lives there she has keys.
+- Every scene is written live by Haiku. The 76 hand-written scenes, `/ship scripted` and `/ship demo` are gone;
+  when the model cannot answer, nothing plays.
+- Real time: each request carries the human's clock and exactly how long ago they last talked.
+- Their life: talking, dating, fights, breakups (days apart), making up, moving in, engaged, married, kids, on
+  real days, rolled per user; the room shows it (her flower, their photo, the gold wedding frame, the kid, her ring).
+
+Verified
+- `claude plugin validate .`: passes. `claude plugin test .`: 30 pass. `tsc -p . --noUnusedLocals`: clean.
+
+
 ## 0.1.0 (2026-11-21), the night build
 
 Completed

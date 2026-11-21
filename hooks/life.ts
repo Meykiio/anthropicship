@@ -80,6 +80,21 @@ export function dueMilestone(life: Life, nowMs: number, pace: Pace, random: () =
   return isReady && roll < 0.02 ? next.milestone : null
 }
 
+/**
+ * What must clearly happen in a milestone scene, told to the writer, and the
+ * words that prove it did. A scene without them does not change their life.
+ */
+export const MUST: Readonly<Record<Milestone, { outcome: string; proof: RegExp }>> = {
+  ask_out: { outcome: 'they agree to be together, out loud', proof: /\b(official|together|girlfriend|boyfriend|date me|go out|yes)\b/i },
+  move_in: { outcome: 'she moves in, with her things', proof: /\b(move|moving|moved|box|boxes|my (stuff|things)|live here|keys?)\b/i },
+  propose: { outcome: 'one of them asks "will you marry me" in their own words, and the answer is yes', proof: /\bmarry\b|\bring\b|\bpropos/i },
+  wedding: { outcome: 'they say "I do" and are married', proof: /\bi do\b|\bmarried\b|\bhusband\b|\bwife\b|\bvows?\b/i },
+  baby: { outcome: 'their baby crab is here, and they say its name', proof: /\bbaby\b|\bkid\b|\bnamed?\b|\bdaughter\b|\bson\b/i },
+  fight: { outcome: 'they fight, and it is not resolved', proof: /\S/ },
+  breakup: { outcome: 'she says clearly that it is over between them, then leaves', proof: /\b(over|done|break up|breaking up|broke up|finished|leaving you)\b/i },
+  make_up: { outcome: 'they say clearly that they are back together', proof: /\b(back together|forgive|forgiven|sorry|missed you|us again|try again)\b/i },
+}
+
 const remember = (life: Life, at: number, what: string): LifeEvent[] => [...life.events, { at, what }].slice(-40)
 
 /** What a played milestone changes. */

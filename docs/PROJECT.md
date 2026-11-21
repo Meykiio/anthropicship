@@ -2,15 +2,16 @@
 
 ## Current State
 
-- Version 0.1.0, built in one night on 2026-11-21. Local git repo, no remote yet: publishing to
-  GitHub (public, under Meykiio) waits for Sifeddine's yes.
-- Works: band above the prompt with pixel sprites (terminal Raster, SVG elsewhere), director,
-  Haiku writer with caps and script fallback, 76 hand-written scenes, cross-session memory, `/ship`,
-  no show and no tokens in non-interactive sessions.
-- Verified: `claude plugin validate .` passes; `claude plugin test .` 28/28; strict type check clean;
-  a real `claude -p --plugin-dir` session loaded it and played a live Haiku scene; samples tuned.
-- Not yet seen by a person in a live session. Next: run `claude --plugin-dir .` in a real project,
-  watch an hour of it, tune pacing and the bible, film a clip for the README.
+- Version 0.2.0 (2026-11-21). Local git repo, no remote yet: publishing to GitHub (Meykiio/anthropicship)
+  waits for Sifeddine's yes. He plans to share it on GitHub and social media.
+- Layout he asked for: a panel beside the chat, history on top (real times), the live room pinned at the
+  bottom with speech bubbles over their heads. Nothing in his work area.
+- Works: the room (window on the real sky, desk and laptop, door, plant), the doorbell (he finishes first or
+  drops everything), walks, reactions (jump, shake, hearts), live Haiku scenes only (no canned scenes), real
+  time in every request, the life arc (talking, dating, fights, breakups, moving in, engaged, married, kids)
+  with the room changing to match, cross-session memory, `/ship`.
+- Verified: `claude plugin validate .` passes; `claude plugin test .` 30/30; `tsc -p .` clean.
+- Next: watch it live for an hour, tune pacing and the bible from real scenes, film a clip, publish.
 
 ## What it is
 
@@ -18,7 +19,7 @@ A comedy that runs beside real work. Ruby, an AI who lives in the same machine, 
 he works. He is locked in, forgets her every session, gets cut off by the human. The jokes come from
 what really happens in the session, so every user's show is different.
 
-Visual direction: one coherent pixel world in Claude's coral. Him `#D97757`, her a warmer coral with
+Visual direction: one coherent pixel world in Claude's coral, a dusky room (`hooks/colors.ts`). Him `#D97757`, her a warmer coral with
 a rose bow `#E8607A`, eyes near black. No other accents except the small mood signs.
 
 ## Design decisions
