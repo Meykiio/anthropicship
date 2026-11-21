@@ -1,12 +1,16 @@
 {
   "name": "anthropicship",
-  "owner": { "name": "Meykiio" },
-  "metadata": { "description": "Anthropicship: a pixel girlfriend for Claude, living above the prompt. An unofficial fan mod." },
+  "owner": {
+    "name": "Meykiio"
+  },
+  "metadata": {
+    "description": "Anthropicship: Claude has a girlfriend now. A pixel room next to your chat where they build a life together. Unofficial fan mod."
+  },
   "plugins": [
     {
       "name": "anthropicship",
       "source": "./",
-      "description": "Claude has a girlfriend now. Ruby lives above your prompt, texts him while he works, and gets left on read. An unofficial fan mod."
+      "description": "Claude has a girlfriend now. A pixel room next to your Claude Code chat: he works, Ruby rings the doorbell, and over the weeks they build a life together. Unofficial fan mod."
     }
   ]
 }

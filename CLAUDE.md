@@ -13,6 +13,7 @@ A Claude Code mod (hooks-module plugin): Ruby, Claude's girlfriend, in a room pa
 - Read real model scenes: `bun tools/sample.ts out/s`, then for each `out/s/<beat>.txt`:
   `claude -p --model haiku --system-prompt "$(cat out/s/bible.txt)" --tools "" < out/s/<beat>.txt`.
   Run them one at a time: twelve in parallel all came back empty.
+- README demo GIF: `bun tools/gif.ts out/frames.json && python tools/gif.py out/frames.json media/demo.gif`.
 - README picture: `bun tools/poster.ts out/panel.html married 1 && bash tools/shot.sh out/panel.html media/panel.png 730 790`.
 
 ## Gotchas

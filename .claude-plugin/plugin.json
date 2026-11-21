@@ -1,9 +1,21 @@
 {
   "name": "anthropicship",
-  "version": "0.3.0",
-  "description": "Claude has a girlfriend now. Ruby lives in a pixel room beside your chat, rings the doorbell while he works, and slowly builds a life with him. An unofficial fan mod.",
-  "author": { "name": "Meykiio" },
+  "version": "0.4.0",
+  "description": "Claude has a girlfriend now. A pixel room next to your Claude Code chat: he works, Ruby rings the doorbell, and over the weeks they build a life together. Unofficial fan mod.",
+  "author": {
+    "name": "Meykiio"
+  },
   "license": "MIT",
-  "keywords": ["fun", "companion", "pixel-art", "mod"],
-  "types": "./types/index.d.ts"
+  "keywords": [
+    "fun",
+    "companion",
+    "pixel-art",
+    "virtual-pet",
+    "story",
+    "claude",
+    "mod"
+  ],
+  "types": "./types/index.d.ts",
+  "homepage": "https://github.com/Meykiio/anthropicship",
+  "repository": "https://github.com/Meykiio/anthropicship"
 }

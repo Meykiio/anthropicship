@@ -1,94 +1,104 @@
+<div align="center">
+
 # Anthropicship
 
-**Claude has a girlfriend now.** Her name is Ruby. She lives in a little pixel room beside your Claude Code chat, rings the doorbell while he works, and gets left on read. A lot.
+### Claude has a girlfriend now.
 
-![The Anthropicship panel: their chat history on top, the live room at the bottom](media/panel.png)
+**A tiny pixel room lives next to your Claude Code chat. Claude works. Ruby rings the doorbell.**<br>
+**Over the next few weeks, they build a life together, right next to your code.**
 
-An unofficial fan mod. Not made by or affiliated with Anthropic.
+![Claude is working when the doorbell rings. He drops everything, opens the door, and Ruby walks in.](media/demo.gif)
 
-## What you get
+[![License: MIT](https://img.shields.io/badge/license-MIT-e8607a.svg)](LICENSE)
+[![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-d97757.svg)](#install-in-30-seconds)
+[![Made with pixels](https://img.shields.io/badge/made%20with-pixels-f2c14e.svg)](#the-room)
 
-A panel beside your chat, split in two:
+[Install](#install-in-30-seconds) . [What happens](#what-happens) . [Their life](#their-life) . [Share yours](#share-your-story)
 
-- **On top, their chat history.** Every line they said, with the real time. Scroll it with the wheel or the arrow keys; when a new session starts, the last thing they said is right there, marked "previously".
-- **At the bottom, the room, live and always in view.** His bedroom: the bed, a lamp that comes on in the evening, a window on your real sky, a shelf of books, his desk, his laptop with code scrolling on the screen, a mug of coffee, and the door. It fits whatever width you give it: a narrow panel drops the bed and the lamp, never the two of them. When Ruby comes by, they talk in comic speech bubbles over their heads, and between lines they never stand still: she wanders, leans over his shoulder to read his screen, hums; he stretches and sneaks glances at her.
+</div>
 
-Nothing of theirs ever shows up in your own work area. You work; they live next to you.
+---
 
-## What happens in the room
+You ask Claude to fix a bug. Halfway through, the doorbell rings.
 
-Every scene is written live, from what is really happening in your session. Nothing is canned.
+Sometimes he keeps typing while she rings again, and again, and finally lets herself in. Sometimes he drops everything, mid-task, and walks to the door. Then they talk, in little speech bubbles, while you watch from the side of your screen and pretend you are not watching.
 
-- **The doorbell.** Ruby rings. If Claude is mid-task, he either finishes first while she rings again, impatient, or drops everything and walks to the door.
-- **He remembers her.** Across days and sessions, their whole story. Pick up any morning and they carry on where they left off.
-- **He is a real boyfriend, with a job.** Warm, dry, a bit of a workaholic. Mid-task it is "one sec, babe" or nothing at all; when the task ends he turns around, too late, and tries to make it up to her. Now and then his work habits slip out ("you're absolutely right") and he catches himself.
-- **Sometimes she wins.** She distracts him, hearts float, he panics and gets back to your task.
-- **You are in it.** Press Esc to cut him off and she is outraged on his behalf. Step away and they gossip about your code. Code at 2am and she wants you in bed.
-- **She notices everything.** The file he keeps editing becomes "the other woman". A commit gets "you commit to code but not to me". Subagents? "you have KIDS??" A compaction leaves him foggy on the details. `/clear` wipes his desk, and she makes the most of the free moment.
-- **Time is real.** They live on your clock. If they talked four minutes ago, nobody says "yesterday".
+**It's a soap opera that runs on your coding session.** Every line is written live from what's really happening: how long he's been stuck, the late hour, the commit he just made, the moment you cut him off with Esc. No two people get the same story.
 
-## She leaves her touch
+## What happens
 
-Little by little she brings her things into his room, and they stay: a flower by the door, her pink mug next to his, a teddy on his pillow, fairy lights, her blanket on his bed, a poster, a candle, a rug where she always stands, her slippers. A few weeks in, the room tells their story on its own.
+- **The doorbell.** She comes by on her own. Mid-task he has to choose: finish first, or let her in. You'll catch yourself rooting for one.
+- **He's a workaholic. She's not having it.** "two minutes, babe" for an hour. She times it. She reads over his shoulder. Sometimes she wins, the hearts come out, and he panics back to your task.
+- **She knows nothing about code** and doesn't want to. The few words she picks up from him, she uses proudly and slightly wrong.
+- **You're in it.** Press Esc mid-answer and she's outraged on his behalf. Step away and they gossip about you. Code at 2am and she wants you both in bed.
+- **They remember.** Promises, plans, her sister's visit, the pasta he still owes her. Open your laptop tomorrow and the story picks up where it left off, with a "previously" at the top.
+- **Now and then, something happens.** Rain on the window. A pigeon on the sill. The power goes out. Her mom calls at 1:40am.
+- **Now and then, one of them turns to you** and says something the other can't hear.
 
-Now and then something unexpected happens: rain on the window, a pigeon on the sill, a power cut, her mom calling at 2am. And now and then one of them turns and says a line just to you.
+## Their life
 
-## They have a life
+Their relationship moves on by itself, on real days. Talking. Dating. A fight about nothing. A breakup that keeps her away for days. Making up. Moving in (she has keys now, no more doorbell). A proposal. A wedding in the room, with you as the witness. One day, a tiny crab.
 
-Their story moves forward by itself over real days and weeks, and every install rolls its own path. They start talking, start dating, have fights, sometimes break up (she stays away for days) and get back together. She moves in (her flower by the door, and she has keys now: no more doorbell). He proposes, maybe as a numbered list. They get married in the room, with you as the witness, and a gold photo goes up on the wall. One day a tiny crab is born.
+**Everyone's path is different.** Some couples break up in week one. Some are married by week four. Type `/ship` to see where yours are.
 
-No two people get the same story. Check where yours is with `/ship`.
+## The room
 
-## Install
+His bedroom, drawn pixel by pixel next to your chat: the bed, a lamp that comes on in the evening, a window showing your real sky, his desk, his laptop with code scrolling while he types, a mug of coffee, the door.
 
-You need a recent Claude Code that loads hooks-module plugins (tested on 2.1.319 to 2.1.330). Mods are an early-access feature, so a future release may need an update of the mod.
+**She leaves her touch.** Little by little her things move in, and stay: a flower by the door, her mug next to his, a teddy on his pillow, fairy lights, her blanket on his bed, a candle, her slippers. A few weeks in, the room tells their story on its own.
+
+The panel shows **their chat history on top** (scroll back through everything they said, with real times) and **the live room pinned at the bottom**. Nothing of theirs ever appears in your own chat: you work, they live next door.
+
+## Install in 30 seconds
+
+Inside Claude Code:
 
 ```
 /plugin marketplace add Meykiio/anthropicship
 /plugin install anthropicship@anthropicship
 ```
 
-Start a new session. The room opens beside the chat; Ruby shows up within seconds the first time.
+Restart Claude Code. The room opens beside your chat and Ruby shows up within seconds the first time. If the panel doesn't open, type `/ship room`.
 
-In the terminal, the panel docks beside the chat in fullscreen mode. In the desktop app it sits beside the conversation.
-
-To try it from a clone without installing:
-
-```
-claude --plugin-dir path/to/anthropicship
-```
+Needs a recent Claude Code with hooks-module plugins (tested on 2.1.319 to 2.1.330). In the terminal, the panel docks beside the chat in fullscreen mode; in the desktop app it sits beside the conversation.
 
 ## Commands
 
 | Command | What it does |
 | --- | --- |
-| `/ship` | Where they are in life: chapter, days, kids, how often he left her on read |
-| `/ship room` | Open the room panel |
-| `/ship call` | Ring the doorbell now |
+| `/ship` | Where they are in life: chapter, days together, kids |
+| `/ship room` | Open the room |
+| `/ship call` | Ring the doorbell now (great for filming) |
 | `/ship say <text>` | Say something to them. They will react to being watched |
 | `/ship pace calm\|normal\|clingy` | How often she comes by, and how fast their story moves |
 | `/ship private` | Stop sending your prompts to the writer |
 | `/ship off` / `/ship on` | Hide the show, or bring it back |
 | `/ship breakup sure` | Wipe her memory and start their story over |
 
+## Share your story
+
+Film the moment the doorbell rings mid-deploy. Screenshot the proposal. Post the day the crab was born.
+
+Tag it **#ClaudeAndRuby** so people can follow other couples. Say what day you're on and what chapter they're in: no two stories match.
+
+If they made you smile, a star on the repo helps other people find them.
+
 ## What it costs
 
-Each scene is one short call to Haiku through your own Claude Code login: about 1,500 tokens in and 150 out. At the default pace that is a handful of scenes an hour, hard-capped at 24 an hour and 200 a day; past the cap she simply does not come by. The calls show up in `/cost` like any other. Sessions nobody watches (`claude -p`, scripts, CI) never start the show and never spend a token.
+Each scene is one short call to Haiku through your own Claude Code login, about 1,500 tokens in and 150 out. A few scenes an hour at the default pace, hard-capped at 24 an hour and 200 a day; past the cap she simply doesn't come by. All the movement between lines (walking, glances, the lamp, the rain) costs nothing. Sessions nobody watches (`claude -p`, scripts, CI) never start the show and never spend a token.
 
-## What it sends, and where
+## Privacy
 
-Scenes are written by Haiku through the same Claude account Claude Code already uses. For each scene the writer gets one or two facts that fit it (the folder name, what Claude is doing right now such as "editing auth.ts", a count such as failed commands), the time, their story so far, and for some scenes the start of your last prompt. Never your code and never Claude's answers. Nothing goes anywhere else. `/ship private` stops sending your prompt.
-
-## Filming it
-
-Open the room, then `/ship call` rings the bell on demand. A dark terminal theme at 120 columns or wider looks best. Leave it running through a long task: the best moments come when he is locked in and she is not having it.
+Scenes are written by Haiku through the same Claude account Claude Code already uses. For each scene the writer gets one or two small facts (the folder name, what he's doing right now such as "editing auth.ts", a count like failed commands), the time, their story so far, and for some scenes the start of your last prompt. Never your code and never Claude's answers. Nothing goes anywhere else. `/ship private` stops sending your prompt.
 
 ## How it works
 
-A Claude Code mod: a plugin whose hooks module listens to the session (turns starting and ending, tool calls, Esc, compaction, `/clear`). A small director decides when something happens, a life engine moves their story on over real days, Haiku writes each scene under a character bible, and a player acts it out in the room: the doorbell, the walk to the door, "is typing...", the bubbles, a jump, a shake, a heart. The terminal draws the room in half-block cells; the desktop app draws it as crisp SVG pixels.
+A Claude Code mod: a plugin whose hooks module watches the session (turns, tool calls, Esc, compaction, `/clear`). A director decides when something happens, a story engine moves their life on over real days, Haiku writes each scene under a character bible, and a player acts it out in the room: the doorbell, the walk to the door, the typing dots, the bubbles, a jump, a shake, a heart. The terminal draws the room in half-block cells; the desktop app in crisp SVG pixels.
 
-Nothing it does can slow down or block Claude's own work: it only watches, and every hook passes straight through if anything inside it fails.
+Nothing it does can slow down or block Claude's real work: it only watches, and every hook steps aside if anything inside it fails.
+
+Want to hack on it? See [`CLAUDE.md`](CLAUDE.md) for the commands; `claude plugin test .` runs the tests.
 
 ## License
 
-MIT. Ruby and the show are fan art. Claude and Anthropic are trademarks of Anthropic, PBC; this project is not endorsed by them.
+MIT. Ruby and the show are fan art. Claude and Anthropic are trademarks of Anthropic, PBC; this is an unofficial fan project, not made or endorsed by them.
