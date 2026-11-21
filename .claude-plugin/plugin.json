@@ -1,0 +1,9 @@
+{
+  "name": "anthropicship",
+  "version": "0.1.0",
+  "description": "Claude has a girlfriend now. Ruby lives above your prompt, texts him while he works, and gets ignored, a lot. An unofficial fan mod.",
+  "author": { "name": "Meykiio" },
+  "license": "MIT",
+  "keywords": ["fun", "companion", "pixel-art", "mod"],
+  "types": "./types/index.d.ts"
+}
