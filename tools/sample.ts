@@ -9,7 +9,7 @@ import type { Beat } from '../hooks/beats'
 import { BIBLE } from '../hooks/bible'
 import { facts } from '../hooks/facts'
 import { FRESH } from '../hooks/memory'
-import { askFor } from '../hooks/writer'
+import { askFor } from '../hooks/prompt'
 
 const dir = process.argv[2] ?? 'out/samples'
 const now = Date.UTC(2026, 10, 21, 0, 40)
@@ -20,7 +20,6 @@ writeFileSync(`${dir}/bible.txt`, BIBLE)
 Object.assign(facts, {
   project: 'pz-web',
   task: 'the checkout page crashes when the cart is empty, fix it and add a test',
-  lastAnswer: "I found the issue: `cart.items` is undefined when the cart is empty, so `.map` throws.",
   isWorking: true,
   turnStartedMs: now - 9 * 60_000,
   toolsThisTurn: 31,

@@ -23,7 +23,7 @@ Most of the time nothing happens. That is on purpose: the moments land because t
 
 ## Install
 
-You need a recent Claude Code (one that loads hooks-module plugins: version 2.1.300 or later).
+You need a recent Claude Code that loads hooks-module plugins (tested on 2.1.319 and 2.1.328). They are an early-access feature, so a future release may need an update of the mod.
 
 ```
 /plugin marketplace add Meykiio/anthropicship
@@ -49,7 +49,7 @@ claude --plugin-dir path/to/anthropicship
 | `/ship pace calm\|normal\|clingy` | How often she comes by |
 | `/ship live` | Scenes written fresh by a small model from what is happening (default) |
 | `/ship scripted` | Hand-written scenes only. Zero tokens |
-| `/ship private` | Stop sending your prompts and his answers to the writer |
+| `/ship private` | Stop sending your prompts to the writer |
 | `/ship off` / `/ship on` | Hide the show, or bring it back |
 | `/ship breakup` | Wipe her memory of him and start over |
 
@@ -61,7 +61,7 @@ In **scripted** mode it costs nothing: about 80 hand-written scenes, picked to f
 
 ## What it sends, and where
 
-Live scenes are written by Haiku through the same Claude account Claude Code already uses. The writer is told: the folder name, the time, what Claude is doing right now (for example "editing auth.ts"), counts like failed commands and edits per file, the start of your last prompt and of his last answer, and the relationship stats. Nothing goes anywhere else. `/ship private` stops sending your prompt and his answer. `/ship scripted` sends nothing at all.
+Live scenes are written by Haiku through the same Claude account Claude Code already uses. The writer is told: the folder name, the time, what Claude is doing right now (for example "editing auth.ts"), counts like failed commands and edits per file, the start of your last prompt for a few kinds of scene, and the relationship stats. Never your code or his answers. Nothing goes anywhere else. `/ship private` stops sending your prompt too. `/ship scripted` sends nothing at all.
 
 ## Filming it
 

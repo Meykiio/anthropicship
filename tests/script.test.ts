@@ -37,6 +37,17 @@ test('numbered or bulleted model lines still read', () => {
   ])
 })
 
+test('his answer as a bullet list stays his, and a spoken "(seen)" is the cue', () => {
+  const scene = parseScene('claude: Here is a summary:\n- I was running the tests.\n- I did not reply.\nruby: (seen)', true)
+
+  expect(scene).toEqual([
+    { who: 'claude', text: 'Here is a summary:' },
+    { who: 'claude', text: '- I was running the tests.' },
+    { who: 'claude', text: '- I did not reply.' },
+    { cue: 'seen' },
+  ])
+})
+
 test('placeholders fill from the facts', () => {
   expect(fill('you touched {file} {count} times', { file: 'auth.ts', count: '9' })).toBe('you touched auth.ts 9 times')
   expect(fill('{nope}', {})).toBe('it')

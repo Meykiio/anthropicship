@@ -70,9 +70,17 @@ export function parseScene(text: string, isStrict: boolean): Scene | null {
       continue
     }
     const said = SPEAKER.exec(line)
+    const last = steps.at(-1)
 
     if (said === null) {
-      junk += 1
+      // A bullet under his line is him answering in a list: keep it, as his.
+      const bullet = /^\s*(?:[-*]|\d+[.)])\s+\S/.test(raw)
+
+      if (bullet && last !== undefined && 'who' in last) {
+        steps.push({ who: last.who, text: cleanText(raw.trim()) })
+      } else {
+        junk += 1
+      }
       continue
     }
     const name = (said[1] ?? '').toLowerCase()
@@ -80,6 +88,10 @@ export function parseScene(text: string, isStrict: boolean): Scene | null {
 
     if (words === '') continue
     if (isStrict && BANNED.some(rule => rule.test(words))) return null
+    if (CUE.test(words)) {
+      steps.push({ cue: 'seen' }) // "ruby: (seen)" and the like
+      continue
+    }
     steps.push({ who: name === 'human' ? 'user' : (name as 'ruby' | 'claude' | 'user'), text: words })
   }
 

@@ -24,7 +24,7 @@ export const HELP = [
   '  /ship pace calm|normal|clingy   how often she comes by',
   '  /ship live            scenes written fresh by a small model (Haiku, capped)',
   '  /ship scripted        hand-written scenes only, zero tokens',
-  '  /ship private         stop sending your prompts and his answers to the writer (again to undo)',
+  '  /ship private         stop sending your prompts to the writer (again to undo)',
   '  /ship off | on        hide the show, or bring it back',
   '  /ship breakup         wipe her memory of him and start over',
 ].join('\n')
@@ -52,7 +52,7 @@ export function parseShip(args: string, prefs: Prefs): ShipAction {
     case 'private':
       return prefs.isPrivate
         ? { kind: 'prefs', change: { isPrivate: false }, said: 'Private mode off: scenes may quote your prompts again.' }
-        : { kind: 'prefs', change: { isPrivate: true }, said: 'Private mode on: your prompts and his answers are no longer sent to the writer.' }
+        : { kind: 'prefs', change: { isPrivate: true }, said: 'Private mode on: your prompts are no longer sent to the writer.' }
     case 'pace': {
       const pace = (rest[0] ?? '').toLowerCase()
 

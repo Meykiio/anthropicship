@@ -6,8 +6,6 @@ export type Facts = {
   project: string
   /** What the human asked for in the current or last turn, shortened. */
   task: string
-  /** The start of his last answer, shortened. */
-  lastAnswer: string
   isWorking: boolean
   turnStartedMs: number
   /** Tool calls in the current turn. */
@@ -32,7 +30,6 @@ export type Facts = {
 export const facts: Facts = {
   project: 'this project',
   task: '',
-  lastAnswer: '',
   isWorking: false,
   turnStartedMs: 0,
   toolsThisTurn: 0,

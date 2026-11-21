@@ -80,7 +80,6 @@ export const register: Register = on => {
 
     if (e.agentId !== undefined) return result
     facts.isWorking = false
-    facts.lastAnswer = e.answer
     await touch($)
     if (e.reason === 'aborted' || e.isAborted) {
       remember($, m => ({ ...m, interrupts: m.interrupts + 1 }))
@@ -128,7 +127,7 @@ export const register: Register = on => {
     // A /clear ends the conversation but not the process: he is new again.
     if (e.reason === 'clear') {
       await newSession($)
-      Object.assign(facts, { task: '', lastAnswer: '', isWaitingOnHim: false })
+      Object.assign(facts, { task: '', isWaitingOnHim: false })
       void cue($, 'cleared')
     }
 

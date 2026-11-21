@@ -1,0 +1,11 @@
+{
+  "name": "anthropicship",
+  "owner": { "name": "Meykiio" },
+  "plugins": [
+    {
+      "name": "anthropicship",
+      "source": "./",
+      "description": "Claude has a girlfriend now. Ruby lives above your prompt, texts him while he works, and gets left on read. An unofficial fan mod."
+    }
+  ]
+}

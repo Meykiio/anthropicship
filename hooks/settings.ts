@@ -27,7 +27,7 @@ export const SETTINGS = {
 
   /** Model scenes: the model, its cap and its patience. */
   model: 'haiku',
-  maxTokens: 400,
+  maxTokens: 220,
   modelTimeoutMs: 20_000,
   /** At most this many model scenes an hour and a day; past that, the scripts play. */
   liveScenesPerHour: 12,

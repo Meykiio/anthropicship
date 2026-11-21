@@ -3,7 +3,7 @@
 
 import { expect, mock, test } from 'claude-code/testing'
 import type { Engine } from 'claude-code/testing'
-import type { On } from 'claude-code'
+import type { ModelCompleteResult, On } from 'claude-code'
 
 const NOW = Date.UTC(2026, 10, 21, 14, 0)
 const SLOW = { timeoutMs: 60_000 }
@@ -40,7 +40,10 @@ function host(on: On, stored: Record<string, unknown>, reply: () => ModelReply) 
     const r = reply()
     const usage = { input_tokens: 900, output_tokens: 80 }
 
-    return { value: r.isAnswered ? { ...r, usage } : { ...r, status: 500, error: 'x', usage } }
+    // Only the fields the mod reads; the rest of a real result does not matter here.
+    const value = r.isAnswered ? { ...r, usage } : { ...r, status: 500, error: 'x', usage }
+
+    return { value: value as unknown as ModelCompleteResult }
   })
   on('ui.render', ($, e) => {
     const { Text } = $.ui.resolve(e)

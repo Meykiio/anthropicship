@@ -12,7 +12,8 @@ import { play, show } from './player'
 import { demoScene } from './scenes'
 import type { Scene } from './script'
 import { SETTINGS } from './settings'
-import { localTime, valuesFor, write } from './writer'
+import { dayKey, localTime } from './time'
+import { valuesFor, write } from './writer'
 
 const HOUR_MS = 3_600_000
 
@@ -21,12 +22,6 @@ export const session = { played: {} as Record<string, number>, liveTimes: [] as 
 
 /** Something the human asked for while a scene played: it plays next. */
 let waiting: { beat: Beat; said: string } | null = null
-
-const dayKey = (nowMs: number): string => {
-  const d = new Date(nowMs)
-
-  return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`
-}
 
 export function liveThisHour(nowMs: number): number {
   session.liveTimes = session.liveTimes.filter(at => nowMs - at < HOUR_MS)
@@ -118,6 +113,8 @@ async function perform($: EngineInterface, beat: Beat, scene: Scene, isArriving:
   const lines = scene.map(step => ('cue' in step ? `(${step.cue === 'seen' ? 'seen' : `ruby ${step.cue}s`})` : `${step.who}: ${step.text}`))
 
   remember($, m => countSeen({ ...m, lastScene: lines.slice(-8) }, beat))
+  // One line per scene in the debug log (`claude --debug`): how to see the show without a screen.
+  $.ui.log(`anthropicship: scene ${beat}: ${lines.join(' | ')}`, { to: 'debug' })
   const { wasIgnored } = await play($, scene, isArriving)
 
   if (wasIgnored) remember($, m => ({ ...m, ignored: m.ignored + 1 }))
