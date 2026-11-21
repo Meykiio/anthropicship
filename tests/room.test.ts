@@ -5,12 +5,14 @@ import { expect, test } from 'claude-code/testing'
 import { bubble, wrapLines } from '../hooks/bubbles'
 import { EMPTY_STAGE } from '../hooks/empty'
 import { nextIdle } from '../hooks/idle'
-import { drawRoom, layout } from '../hooks/room'
+import { fitWindow } from '../hooks/pane'
+import { layout } from '../hooks/layout'
+import { drawRoom } from '../hooks/room'
 
 const NOW = Date.UTC(2026, 10, 21, 13, 0)
 const here = { ...EMPTY_STAGE, move: 'here' as const, moveAt: NOW - 60_000 }
 const life = { chapter: 'dating', isApart: false, kids: 0 }
-const quiet = { his: null, hers: null, last: null, typing: null }
+const quiet = { his: null, hers: null, last: null, typing: null, aside: null }
 
 test('long lines wrap into at most three lines and never lose the end silently', () => {
   expect(wrapLines('you made me wait outside for two minutes', 16)).toEqual(['you made me wait', 'outside for two', 'minutes'])
@@ -37,7 +39,8 @@ test('both talking: his bubble over him, hers over her, not overlapping', () => 
     hour: 13,
     isWorking: false,
     life,
-    speech: { his: 'two minutes', hers: 'you said that an hour ago', last: 'ruby', typing: null },
+    speech: { his: 'two minutes', hers: 'you said that an hour ago', last: 'ruby', typing: null, aside: null },
+    things: [],
   })
   const { hisX, herX } = layout(78)
   const rows = room.overlays.filter(o => o.text.length > 1)
@@ -52,10 +55,10 @@ test('both talking: his bubble over him, hers over her, not overlapping', () => 
 })
 
 test('no bubbles when nobody talks, and typing shows dots', () => {
-  const still = drawRoom({ stage: here, nowMs: NOW, frame: 1, width: 78, hour: 13, isWorking: true, life, speech: quiet })
+  const still = drawRoom({ stage: here, nowMs: NOW, frame: 1, width: 78, hour: 13, isWorking: true, life, things: [], speech: quiet })
 
   expect(still.overlays.length).toBe(0)
-  const typing = drawRoom({ stage: here, nowMs: NOW, frame: 1, width: 78, hour: 13, isWorking: true, life, speech: { ...quiet, typing: 'ruby' } })
+  const typing = drawRoom({ stage: here, nowMs: NOW, frame: 1, width: 78, hour: 13, isWorking: true, life, things: [], speech: { ...quiet, typing: 'ruby' } })
 
   expect(typing.overlays.some(o => o.text.includes('..'))).toBe(true)
 })
@@ -65,4 +68,12 @@ test('between lines she moves and he reacts; never during a scene', () => {
   expect(nextIdle(here, false, false, 0.35, 0)).toEqual({ act: 'look' })
   expect(nextIdle(here, false, true, 0.1, 0)).toBeNull()
   expect(nextIdle({ ...here, typing: 'ruby' }, false, false, 0.1, 0)).toBeNull()
+})
+
+test('the history window: newest by default, older lines when scrolled back', () => {
+  const lines = Array.from({ length: 30 }, (_, i) => ({ id: i, who: 'ruby' as const, text: `line ${i}`, at: NOW }))
+
+  expect(fitWindow(lines, 5, 80, 0).map(line => line.text)).toEqual(['line 25', 'line 26', 'line 27', 'line 28', 'line 29'])
+  expect(fitWindow(lines, 5, 80, 10).map(line => line.text)).toEqual(['line 15', 'line 16', 'line 17', 'line 18', 'line 19'])
+  expect(fitWindow(lines, 5, 80, 28).map(line => line.text)).toEqual(['line 0', 'line 1'])
 })

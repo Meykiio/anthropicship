@@ -74,7 +74,7 @@ const PANE = {
   plugin: 'anthropicship',
   component: 'Pane',
   requestId: 'room',
-  props: { title: 'Claude & Ruby', isFocused: false, bodyColumns: 64, placement: 'dock', scroll: { offset: 0, bodyRows: 30 }, view: {} },
+  props: { title: 'Claude & Ruby', isFocused: false, bodyColumns: 64, placement: 'dock', scroll: { offset: 0, bodyRows: 34 }, view: {} },
 } as const
 const pane = ($: Engine, surface: 'terminal' | 'desktop') => textOf($, { ...PANE, surface })
 
@@ -147,3 +147,4 @@ test('/ship say puts the human in the scene and in the log', SLOW, async ($, on)
   expect(log).toContain('get back to work you two')
   expect(log).toContain('they can SEE us??')
 })
+

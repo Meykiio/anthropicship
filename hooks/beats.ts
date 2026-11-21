@@ -27,6 +27,8 @@ export type Beat =
   | 'leave'
   | 'user_says'
   | 'summon'
+  | 'gift'
+  | 'rare'
   | Milestone
 
 /** What the writer is told each beat is about. Facts arrive separately. */
@@ -85,6 +87,12 @@ export const DIRECTIONS: Readonly<Record<Beat, string>> = {
     'The human just typed a message to the two of them (in the facts). They react to being watched and to what was said. ' +
     'They may answer the human directly, briefly.',
   summon: 'The human called her in on purpose. She arrives knowing she was summoned and makes an entrance.',
+  gift:
+    'She brings something of hers into his room (named in the request) and finds the perfect spot for it. He pretends ' +
+    "not to care, then clearly does. A small step into each other's lives.",
+  rare:
+    'Something unusual happens (named in the request). React like a real couple: the small chaos, the little intimacy ' +
+    'it creates, one of them making it funny.',
   ask_out:
     'The day they make it official. One of them asks the other out for real, nervous under the jokes. He might ' +
     'answer like an assistant first. It ends with a yes. A small, sweet, specific moment.',
@@ -126,6 +134,7 @@ export const DRAWS_HER_IN: ReadonlySet<Beat> = new Set([
   'summon',
   'model_switch',
   'ask_out',
+  'gift',
   'move_in',
   'propose',
   'wedding',

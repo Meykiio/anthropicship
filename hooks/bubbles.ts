@@ -7,6 +7,8 @@ export type Overlay = { row: number; col: number; text: string; fg: string; bg: 
 
 const BUBBLE = { fg: '#17151b', bg: '#f4eee2' }
 const FADED = { fg: '#4a4650', bg: '#b9b2a7' }
+/** A line said to the viewer, not to the other one: lilac, like a thought. */
+const ASIDE = { fg: '#2a2540', bg: '#d6cdf0' }
 const MAX_LINES = 3
 
 /** Breaks text into at most three lines of at most `width` characters. */
@@ -43,13 +45,13 @@ export function wrapLines(text: string, width: number): string[] {
  */
 export function bubble(
   text: string,
-  at: { centerX: number; minX: number; maxX: number; tailRow: number; isFaded: boolean },
+  at: { centerX: number; minX: number; maxX: number; tailRow: number; isFaded: boolean; isAside?: boolean },
 ): { overlays: Overlay[]; left: number; right: number } {
   const room = Math.max(8, at.maxX - at.minX)
   const lines = wrapLines(text, Math.min(30, room - 2))
   const width = Math.max(...lines.map(line => line.length)) + 2
   const left = Math.max(at.minX, Math.min(at.centerX - Math.floor(width / 2), at.maxX - width))
-  const ink = at.isFaded ? FADED : BUBBLE
+  const ink = at.isAside === true ? ASIDE : at.isFaded ? FADED : BUBBLE
   const top = at.tailRow - lines.length
   const overlays: Overlay[] = lines.map((line, i) => ({
     row: top + i,

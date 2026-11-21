@@ -12,7 +12,7 @@ import { facts } from './facts'
 import { show } from './player'
 
 // player.ts, pane.tsx and animate.ts hold the same value: keep this line identical.
-const stage = atom({ plugin: 'anthropicship', key: 'stage' } as const, EMPTY_STAGE, { shape: 'stage-4' })
+const stage = atom({ plugin: 'anthropicship', key: 'stage' } as const, EMPTY_STAGE, { shape: 'stage-5' })
 
 /** Where she likes to stand: leaning over his screen, closer, her spot, a step back. */
 const SPOTS = [-9, -4, 0, 0, 3, 5]

@@ -37,6 +37,13 @@ export type Memory = {
   lastTalkMs: number
   /** The last scene, so the next one can follow on from it. */
   lastScene: string[]
+  /** What she has brought into his room, in order. */
+  things: string[]
+  /** Small facts from their scenes they keep coming back to ("her sister is visiting Friday"). */
+  notes: string[]
+  /** When she last brought something, and when something rare last happened (epoch ms). */
+  lastGiftMs: number
+  lastRareMs: number
   /** Their life together: chapter, breakups, kids, and the dated story. */
   life: Life
   /** How many times each kind of scene has played. */
@@ -58,6 +65,10 @@ export const FRESH: Memory = {
   lastTalkMs: 0,
   lastScene: [],
   life: NEW_LIFE,
+  things: [],
+  notes: [],
+  lastGiftMs: 0,
+  lastRareMs: 0,
   seen: {},
   prefs: { ...DEFAULTS },
 }
@@ -85,10 +96,18 @@ export function revive(raw: unknown): Memory {
     lastTalkMs: num(r.lastTalkMs, 0),
     lastScene: Array.isArray(r.lastScene) ? r.lastScene.filter((l): l is string => typeof l === 'string').slice(-8) : [],
     life: reviveLife(r.life),
+    things: strings(r.things, 20),
+    notes: strings(r.notes, 14),
+    lastGiftMs: num(r.lastGiftMs, 0),
+    lastRareMs: num(r.lastRareMs, 0),
     seen: typeof r.seen === 'object' && r.seen !== null ? (r.seen as Record<string, number>) : {},
     prefs: { pace, isPrivate: p.isPrivate === true, isOn: p.isOn !== false },
   }
 }
+
+/** A stored list of strings, newest kept. */
+const strings = (raw: unknown, max: number): string[] =>
+  Array.isArray(raw) ? raw.filter((s): s is string => typeof s === 'string').slice(-max) : []
 
 /** Their life as stored, or a new one when it is missing or malformed. */
 function reviveLife(raw: unknown): Life {

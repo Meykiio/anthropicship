@@ -38,6 +38,8 @@ const FACTS_FOR: Readonly<Record<Beat, readonly Key[]>> = {
   leave: [],
   user_says: ['said'],
   summon: [],
+  gift: [],
+  rare: [],
   ask_out: [],
   move_in: [],
   propose: [],
@@ -94,7 +96,7 @@ function factLine(key: Key, m: Memory, nowMs: number, said: string): string | nu
 }
 
 /** The user message for one scene: who they are now, a fact or two, then the scene to write. */
-export function askFor(beat: Beat, m: Memory, nowMs: number, isArriving: boolean, said: string): string {
+export function askFor(beat: Beat, m: Memory, nowMs: number, isArriving: boolean, said: string, extra = ''): string {
   const story = [
     storySoFar(m.life, nowMs),
     m.petName === null ? '' : `She calls him "${m.petName}" sometimes, not every line.`,
@@ -114,6 +116,9 @@ export function askFor(beat: Beat, m: Memory, nowMs: number, isArriving: boolean
   const parts = [timeContext(nowMs, m.lastTalkMs), story.join(' '), memoryNote]
 
   if (details.length > 0) parts.push(`A DETAIL YOU MAY USE (optional, once at most):\n- ${details.join('\n- ')}`)
+  if (m.notes.length > 0) parts.push(`THINGS THEY REMEMBER (call back to one now and then, never all):\n- ${m.notes.slice(-8).join('\n- ')}`)
+  if (m.things.length > 0) parts.push(`HER THINGS IN HIS ROOM: ${m.things.join(', ')}.`)
+  if (extra !== '') parts.push(extra)
   if (m.lastScene.length > 0) parts.push(`PREVIOUS SCENE (do not repeat its jokes or details):\n${m.lastScene.join('\n')}`)
   parts.push(`THE SCENE TO WRITE: ${DIRECTIONS[beat]}`)
   const must = beat in MUST ? MUST[beat as Milestone] : undefined

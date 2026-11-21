@@ -10,8 +10,8 @@ An unofficial fan mod. Not made by or affiliated with Anthropic.
 
 A panel beside your chat, split in two:
 
-- **On top, their chat history.** Every line they ever said this session, with the real time, so you never miss a thing.
-- **At the bottom, the room, live.** Claude at his desk, typing on his laptop. A window on your real sky (sun by day, moon by night). A door. When Ruby comes by, they talk in comic speech bubbles over their heads, and between lines they never stand still: she wanders, leans over his shoulder to read his screen, hums; he stretches and sneaks glances at her.
+- **On top, their chat history.** Every line they said, with the real time. Scroll it with the wheel or the arrow keys; when a new session starts, the last thing they said is right there, marked "previously".
+- **At the bottom, the room, live and always in view.** His bedroom: the bed, a lamp that comes on in the evening, a window on your real sky, a shelf of books, his desk, his laptop with code scrolling on the screen, a mug of coffee, and the door. It fits whatever width you give it: a narrow panel drops the bed and the lamp, never the two of them. When Ruby comes by, they talk in comic speech bubbles over their heads, and between lines they never stand still: she wanders, leans over his shoulder to read his screen, hums; he stretches and sneaks glances at her.
 
 Nothing of theirs ever shows up in your own work area. You work; they live next to you.
 
@@ -26,6 +26,12 @@ Every scene is written live, from what is really happening in your session. Noth
 - **You are in it.** Press Esc to cut him off and she is outraged on his behalf. Step away and they gossip about your code. Code at 2am and she wants you in bed.
 - **She notices everything.** The file he keeps editing becomes "the other woman". A commit gets "you commit to code but not to me". Subagents? "you have KIDS??" A compaction leaves him foggy on the details. `/clear` wipes his desk, and she makes the most of the free moment.
 - **Time is real.** They live on your clock. If they talked four minutes ago, nobody says "yesterday".
+
+## She leaves her touch
+
+Little by little she brings her things into his room, and they stay: a flower by the door, her pink mug next to his, a teddy on his pillow, fairy lights, her blanket on his bed, a poster, a candle, a rug where she always stands, her slippers. A few weeks in, the room tells their story on its own.
+
+Now and then something unexpected happens: rain on the window, a pigeon on the sill, a power cut, her mom calling at 2am. And now and then one of them turns and says a line just to you.
 
 ## They have a life
 

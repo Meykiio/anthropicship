@@ -7,10 +7,11 @@ import type { Beat } from './beats'
 import { decide, stayMs } from './director'
 import type { Cue, Room } from './director'
 import { facts } from './facts'
-import { afterFirstMeeting, applyMilestone, dueMilestone, isAtLeast } from './life'
-import type { Milestone } from './life'
+import { isAtLeast } from './life'
 import { countSeen, mind, remember } from './memory'
-import { play, show } from './player'
+import { note, play, setStage, show } from './player'
+import { afterScene, dueStory, extraFor, isMilestone, nextThing, pickRare, roomEventOf, toneOf } from './story'
+import type { Rare } from './story'
 import type { Scene } from './script'
 import { SETTINGS } from './settings'
 import { dayKey, localTime } from './time'
@@ -56,7 +57,7 @@ function roomAt(nowMs: number): Room {
     sessionMs: nowMs - facts.sessionStartMs,
     isFirstSession: m.sessions <= 1,
     isApart: m.life.isApart,
-    due: dueMilestone(m.life, nowMs, m.prefs.pace, Math.random),
+    due: dueStory(m, nowMs, m.prefs.pace, Math.random),
     played: session.played,
   }
 }
@@ -105,8 +106,10 @@ export async function stageBeat($: EngineInterface, beat: Beat, said: string): P
   show.isPlaying = true // held while the writer works, so no tick starts a second scene
   const nowMs = await $.clock.now()
   const isArriving = !show.isHere && beat !== 'leave'
+  const rare = pickRare(Math.random)
+  const extra = extraFor(beat, mind.memory, rare)
   // Past the caps, or when the model cannot answer, she simply does not come by.
-  const scene = mayGoLive(nowMs) ? await write($, beat, mind.memory, nowMs, { isArriving, said }) : null
+  const scene = mayGoLive(nowMs) ? await write($, beat, mind.memory, nowMs, { isArriving, said, extra }) : null
 
   if (scene === null) {
     show.isPlaying = false
@@ -120,11 +123,11 @@ export async function stageBeat($: EngineInterface, beat: Beat, said: string): P
 
     return { ...m, liveDay: dayKey(nowMs), liveCount: (isToday ? m.liveCount : 0) + 1 }
   })
-  await perform($, beat, scene, isArriving)
+  await perform($, beat, scene, isArriving, rare)
 }
 
 /** Plays a scene and keeps the books: what was said, when, who got ignored. */
-async function perform($: EngineInterface, beat: Beat, scene: Scene, isArriving: boolean): Promise<void> {
+async function perform($: EngineInterface, beat: Beat, scene: Scene, isArriving: boolean, rare: Rare): Promise<void> {
   const nowMs = await $.clock.now()
 
   session.played[beat] = (session.played[beat] ?? 0) + 1
@@ -137,25 +140,33 @@ async function perform($: EngineInterface, beat: Beat, scene: Scene, isArriving:
     show.leaveAtMs = nowMs + stayMs(mind.memory.prefs.pace, Math.random) * (hasKeys ? 2 : 1)
   }
   if (beat === 'late_reply') facts.isWaitingOnHim = false
-  const lines = scene.map(step => ('cue' in step ? `(${step.cue === 'seen' ? 'seen' : `ruby ${step.cue}s`})` : `${step.who}: ${step.text}`))
+  const lines = scene.flatMap(step =>
+    'note' in step ? [] : ['cue' in step ? `(${step.cue === 'seen' ? 'seen' : `ruby ${step.cue}s`})` : `${step.who}: ${step.text}`],
+  )
+  const thing = beat === 'gift' ? nextThing(mind.memory) : null
+
+  // The light of the scene, and anything rare that shows in the room.
+  await setStage($, s => ({
+    ...s,
+    tone: toneOf(beat),
+    ...(beat === 'rare' && roomEventOf(rare) !== 'none' ? { event: roomEventOf(rare), eventAt: nowMs } : {}),
+  }))
 
   // One line per scene in the debug log (`claude --debug`): how to see the show without a screen.
   $.ui.log(`anthropicship: scene ${beat}: ${lines.join(' | ')}`, { to: 'debug' })
   const { wasIgnored } = await play($, scene, { isArriving, isSpell: beat === 'spell', hasKeys })
   const endedMs = await $.clock.now()
 
-  remember($, m => countSeen({ ...m, lastScene: lines.slice(-8), lastTalkMs: endedMs, life: lifeAfter(m.life, beat, endedMs) }, beat))
+  remember($, m => countSeen({ ...afterScene(m, beat, scene, endedMs, Math.random), lastScene: lines.slice(-8), lastTalkMs: endedMs }, beat))
+  // Big moments get a title card in the history, like an episode.
+  if (isMilestone(beat)) {
+    const latest = mind.memory.life.events.at(-1)
+
+    if (latest !== undefined && latest.at === endedMs) await note($, 'stage', `.: ${latest.what} :.`)
+  }
+  if (thing !== null && mind.memory.things.includes(thing)) await note($, 'stage', `ruby left her ${thing} here`)
   if (wasIgnored) remember($, m => ({ ...m, ignored: m.ignored + 1 }))
   await playWaiting($)
-}
-
-const MILESTONES: ReadonlySet<string> = new Set<Milestone>(['ask_out', 'move_in', 'propose', 'wedding', 'baby', 'fight', 'breakup', 'make_up'])
-
-/** Their life after a scene: met, or one step further along. */
-function lifeAfter(life: typeof mind.memory.life, beat: Beat, nowMs: number): typeof life {
-  const met = afterFirstMeeting(life, nowMs)
-
-  return MILESTONES.has(beat) ? applyMilestone(met, beat as Milestone, nowMs, Math.random) : met
 }
 
 /** Plays what the human asked for while a scene was on. */

@@ -3,7 +3,10 @@
 
 import type { Speaker } from '../types'
 
-export type Step = { who: Exclude<Speaker, 'stage'>; text: string } | { cue: 'arrive' | 'leave' | 'seen' }
+export type Step =
+  | { who: Exclude<Speaker, 'stage'>; text: string; isAside?: boolean }
+  | { cue: 'arrive' | 'leave' | 'seen' }
+  | { note: string }
 export type Scene = readonly Step[]
 
 const MAX_LINE = 110
@@ -50,6 +53,9 @@ export function cleanText(text: string): string {
 }
 
 const SPEAKER = /^(ruby|claude|user|human)\s*:\s*(.+)$/i
+// "(ruby to you: text)": a line said to the viewer. "(remember: text)": a fact to keep.
+const ASIDE = /^\(\s*(ruby|claude)\s*(?:,|to)\s*(?:to\s*)?(?:you|the viewer|camera)\s*:\s*(.+)\)$/i
+const NOTE = /^\(\s*remember\s*:\s*(.+)\)$/i
 const CUE = /^\(\s*(ruby arrives|ruby leaves|seen)\s*\)$/i
 
 /** Reads a scene from text. Returns null when it is not a usable scene. */
@@ -61,6 +67,22 @@ export function parseScene(text: string, isStrict: boolean): Scene | null {
     const line = raw.trim().replace(/^[-*>\d.\s]+(?=[a-z(])/i, '')
 
     if (line === '') continue
+    const aside = ASIDE.exec(line)
+
+    if (aside !== null) {
+      const words = cleanText(aside[2] ?? '')
+
+      if (words !== '') steps.push({ who: (aside[1] ?? '').toLowerCase() as 'ruby' | 'claude', text: words, isAside: true })
+      continue
+    }
+    const note = NOTE.exec(line)
+
+    if (note !== null) {
+      const fact = cleanText(note[1] ?? '').slice(0, 90)
+
+      if (fact !== '') steps.push({ note: fact })
+      continue
+    }
     const cue = CUE.exec(line)
 
     if (cue !== null) {
@@ -84,7 +106,11 @@ export function parseScene(text: string, isStrict: boolean): Scene | null {
       continue
     }
     const name = (said[1] ?? '').toLowerCase()
-    const words = cleanText(said[2] ?? '')
+    // A "(remember: ...)" tacked onto the end of a spoken line: keep both, apart.
+    const tail = /\(\s*remember\s*:\s*([^)]+)\)\s*$/i.exec(said[2] ?? '')
+
+    if (tail !== null) steps.push({ note: cleanText(tail[1] ?? '').slice(0, 90) })
+    const words = cleanText((said[2] ?? '').replace(/\(\s*remember\s*:[^)]*\)\s*$/i, ''))
 
     if (words === '') continue
     if (isStrict && BANNED.some(rule => rule.test(words))) return null
@@ -102,7 +128,9 @@ export function parseScene(text: string, isStrict: boolean): Scene | null {
 
   const spoken = steps.filter(step => 'who' in step).length
 
-  if (spoken === 0 || junk > 2 || steps.length > MAX_STEPS + 2) return null
+  if (spoken === 0 || junk > 2 || spoken > MAX_STEPS + 1) return null
 
-  return steps.slice(0, MAX_STEPS)
+  const notes = steps.filter(step => 'note' in step).slice(0, 2)
+
+  return [...steps.filter(step => !('note' in step)).slice(0, MAX_STEPS), ...notes]
 }

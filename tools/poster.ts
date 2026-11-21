@@ -12,7 +12,8 @@ import { drawRoom } from '../hooks/room'
 const out = process.argv[2] ?? 'out/panel.html'
 const chapter = process.argv[3] ?? 'living together'
 const kids = Number(process.argv[4] ?? '0')
-const WIDTH = 76
+const WIDTH = Number(process.argv[5] ?? '92')
+const HOUR = Number(process.argv[6] ?? '21')
 const SCALE = 9
 const now = Date.UTC(2026, 10, 21, 20, 40)
 
@@ -31,9 +32,10 @@ const history: readonly [string, string, string][] = [
   ['21:32', 'ruby', 'bug.'],
 ]
 
-const stage = { ...EMPTY_STAGE, move: 'here' as const, moveAt: now - 60_000, herMood: 'mad' as const, moodAt: now - 200 }
-const speech = { his: 'Which name would you like me to use?', hers: "bug. it's literally on the door", last: 'ruby' as const, typing: null }
-const room = drawRoom({ stage, nowMs: now, frame: 2, width: WIDTH, hour: 21, isWorking: true, life: { chapter, isApart: false, kids }, speech })
+const stage = { ...EMPTY_STAGE, tone: 'calm' as const, move: 'here' as const, moveAt: now - 60_000, herMood: 'mad' as const, moodAt: now - 200 }
+const speech = { his: 'two minutes, babe', hers: 'you said that before dinner', last: 'ruby' as const, typing: null, aside: null }
+const things = ['flower', 'mug', 'teddy', 'lights', 'blanket', 'poster', 'candle', 'rug', 'slippers'].slice(0, Number(process.argv[7] ?? '9'))
+const room = drawRoom({ stage, nowMs: now, frame: 2, width: WIDTH, hour: HOUR, isWorking: true, life: { chapter, isApart: false, kids }, things, speech })
 const who = (w: string): string =>
   w === 'stage' ? '' : `<b style="color:${w === 'ruby' ? COLOR.ruby : COLOR.claude}">${w === 'ruby' ? 'ruby' : 'Claude'}</b>  `
 const rows = history

@@ -54,11 +54,10 @@ const memory = {
 }
 
 const beats: readonly [Beat, boolean, string][] = [
+  ['gift', true, ''],
+  ['rare', false, ''],
   ['small_talk', false, ''],
-  ['distract', false, ''],
-  ['late_reply', false, ''],
-  ['drop_by', true, ''],
-  ['reunion', true, ''],
+  ['spell', false, ''],
 ]
 
 facts.firstTalkMs = now - 25 * 60_000
@@ -69,6 +68,8 @@ for (const [beat, isArriving, said] of beats) {
 
   if (beat === 'late_reply' || beat === 'human_away' || beat === 'late_night') facts.isWorking = false
   else facts.isWorking = true
-  writeFileSync(`${dir}/${beat}.txt`, askFor(beat, m, now, isArriving, said))
+  const extra = beat === 'gift' ? 'What she brings today: a small teddy bear, for his pillow.' : beat === 'rare' ? 'What happens: her mom calls.' : ''
+
+  writeFileSync(`${dir}/${beat}.txt`, askFor(beat, { ...m, notes: ['her sister visits on Friday', 'he promised to cook pasta'], things: ['flower', 'mug'] }, now, isArriving, said, extra))
 }
 console.log(`wrote ${beats.length} requests to ${dir}`)

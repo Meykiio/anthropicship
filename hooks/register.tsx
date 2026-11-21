@@ -11,7 +11,7 @@ import { cue } from './conductor'
 import { describeTool, facts, isCommitCommand, isTestCommand, rivalOf } from './facts'
 import { loadMemory, meetAgain, mind, remember } from './memory'
 import { EMPTY_STAGE } from './empty'
-import { setStage } from './player'
+import { note, setStage } from './player'
 import { SETTINGS } from './settings'
 
 const SHELLS = new Set(['Bash', 'PowerShell'])
@@ -50,6 +50,7 @@ export const register: Register = on => {
       await registerCommand($)
       $.clock.every(SETTINGS.tickMs, () => void cue($, 'tick'))
       startAnimation($)
+      await recap($)
       startIdle($)
       // The room opens beside the chat wherever it can be a sidebar.
       if (mind.memory.prefs.isOn) await openRoom($).catch(() => false)
@@ -178,4 +179,18 @@ async function onTool($: EngineInterface, tool: string, input: unknown, failed: 
     void cue($, 'subagent')
   }
   if (isMain && (tool === 'WebSearch' || tool === 'WebFetch')) void cue($, 'search')
+}
+
+/** "Previously": the end of their last talk, at the top of the history, so a new session picks up the thread. */
+async function recap($: EngineInterface): Promise<void> {
+  const m = mind.memory
+
+  if (m.lastScene.length === 0 || m.lastTalkMs === 0) return
+  await note($, 'stage', 'previously', { at: m.lastTalkMs })
+  for (const line of m.lastScene.slice(-4)) {
+    const [who, ...rest] = line.split(': ')
+    const text = rest.join(': ')
+
+    if ((who === 'ruby' || who === 'claude') && text !== '') await note($, who, text, { at: m.lastTalkMs })
+  }
 }

@@ -9,7 +9,7 @@ import { EMPTY_STAGE, WALK_MS } from './empty'
 import { facts } from './facts'
 
 // stage.tsx, pane.tsx and player.ts hold the same values: keep these lines identical.
-const stage = atom({ plugin: 'anthropicship', key: 'stage' } as const, EMPTY_STAGE, { shape: 'stage-4' })
+const stage = atom({ plugin: 'anthropicship', key: 'stage' } as const, EMPTY_STAGE, { shape: 'stage-5' })
 const frame = atom({ plugin: 'anthropicship', key: 'frame' } as const, 0, { shape: 'frame-1' })
 
 const BEAT_MS = 250

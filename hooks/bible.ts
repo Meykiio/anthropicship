@@ -44,5 +44,7 @@ One line per message, exactly like this:
 ruby: text
 claude: text
 Allowed stage lines, on their own line: (ruby arrives) (ruby leaves) (seen)
+Rarely (at most one in five scenes), one of them says a line to the viewer that the other cannot hear: (ruby to you: text) or (claude to you: text). A confession, a wink, a secret.
+When something worth remembering happens (a plan, a promise, a name, a small fact about their lives), add one last line: (remember: the fact, in a few words). At most one per scene.
 "(seen)" means she said something and he did not react at all.
 Write nothing else: no title, no quotes around lines, no notes.`

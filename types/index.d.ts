@@ -4,10 +4,10 @@
 export type Speaker = 'ruby' | 'claude' | 'user' | 'stage'
 
 /** One line of their chat, shown in a speech bubble over the speaker. */
-export type ChatLine = { id: number; who: Speaker; text: string }
+export type ChatLine = { id: number; who: Speaker; text: string; isAside?: boolean }
 
 /** One line of the chat log in the panel: who, what, and when (epoch ms). */
-export type LogLine = { id: number; who: Speaker; text: string; at: number }
+export type LogLine = { id: number; who: Speaker; text: string; at: number; isAside?: boolean }
 
 /** A small sign over a head: love, alarm, a question, silence, sleep, music, anger. */
 export type Mood = 'none' | 'heart' | 'alarm' | 'ask' | 'dots' | 'sleep' | 'note' | 'mad'
@@ -36,6 +36,11 @@ export type Stage = {
   /** A small thing he does between lines, since `actAt`. */
   act: 'none' | 'stretch' | 'look'
   actAt: number
+  /** The light of the scene: calm, warm (tender moments), tense (fights). */
+  tone: 'calm' | 'warm' | 'tense'
+  /** Something rare in the room: rain on the window, a pigeon on the sill, the power out. */
+  event: 'none' | 'rain' | 'pigeon' | 'blackout'
+  eventAt: number
   /** Who is typing right now, if anyone. */
   typing: Speaker | null
   /** The last few lines, oldest first. Empty between scenes. */
@@ -48,6 +53,6 @@ export type Stage = {
 
 declare module 'claude-code' {
   interface PluginState {
-    anthropicship: { stage: Shaped<Stage>; frame: Shaped<number>; log: Shaped<LogLine[]> }
+    anthropicship: { stage: Shaped<Stage>; frame: Shaped<number>; log: Shaped<LogLine[]>; back: Shaped<number> }
   }
 }

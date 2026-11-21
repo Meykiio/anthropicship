@@ -3,7 +3,6 @@
 // most calls return null, so the moments that do come land.
 
 import type { Beat } from './beats'
-import type { Milestone } from './life'
 import { PACES, SETTINGS } from './settings'
 import type { Pace } from './settings'
 
@@ -44,7 +43,7 @@ export type Room = {
   /** Broken up: she stays away unless asked, or until they make up. */
   isApart: boolean
   /** A step in their life that is due now, if any. */
-  due: Milestone | null
+  due: Beat | null
   /** Beats already played this session, with counts. */
   played: Readonly<Record<string, number>>
 }

@@ -12,7 +12,7 @@ import type { Scene } from './script'
 import { SETTINGS } from './settings'
 
 // stage.tsx, pane.tsx and animate.ts hold the same values: keep these lines identical.
-const stage = atom({ plugin: 'anthropicship', key: 'stage' } as const, EMPTY_STAGE, { shape: 'stage-4' })
+const stage = atom({ plugin: 'anthropicship', key: 'stage' } as const, EMPTY_STAGE, { shape: 'stage-5' })
 const log = atom({ plugin: 'anthropicship', key: 'log' } as const, [], { shape: 'log-1' })
 
 const LOG_LIMIT = 120
@@ -29,9 +29,9 @@ export async function setStage($: EngineInterface, change: (s: Stage) => Stage):
 }
 
 /** Adds a line to the panel's log, stamped with the real time. */
-async function note($: EngineInterface, who: Speaker, text: string): Promise<void> {
-  const at = await $.clock.now()
-  const line: LogLine = { id: show.nextId++, who, text, at }
+export async function note($: EngineInterface, who: Speaker, text: string, opts: { at?: number; isAside?: boolean } = {}): Promise<void> {
+  const at = opts.at ?? (await $.clock.now())
+  const line: LogLine = { id: show.nextId++, who, text, at, ...(opts.isAside === true ? { isAside: true } : {}) }
 
   await update($, log, lines => [...lines, line].slice(-LOG_LIMIT))
 }
@@ -49,8 +49,8 @@ export function moodOf(text: string): Mood {
   return 'none'
 }
 
-const append = (lines: readonly ChatLine[], who: Speaker, text: string): ChatLine[] =>
-  [...lines, { id: show.nextId++, who, text }].slice(-SETTINGS.visibleLines)
+const append = (lines: readonly ChatLine[], who: Speaker, text: string, isAside = false): ChatLine[] =>
+  [...lines, { id: show.nextId++, who, text, ...(isAside ? { isAside: true } : {}) }].slice(-SETTINGS.visibleLines)
 
 const readingMs = (text: string): number => SETTINGS.lineBaseMs + text.length * SETTINGS.lineMsPerChar
 
@@ -162,6 +162,7 @@ export async function play(
   if (opts.isArriving && !show.isHere && !scene.some(step => 'cue' in step && step.cue === 'arrive')) await enter($, opts.hasKeys)
   for (const step of scene) {
     if (run !== show.run) break // a newer scene took over
+    if ('note' in step) continue // kept by the conductor, never shown
     if ('cue' in step) {
       if (step.cue === 'arrive' && !show.isHere) await enter($, opts.hasKeys)
       if (step.cue === 'leave' && show.isHere) await leave($)
@@ -185,12 +186,12 @@ export async function play(
     await setStage($, s => ({
       ...s,
       typing: null,
-      lines: append(s.lines, step.who, step.text),
+      lines: append(s.lines, step.who, step.text, step.isAside === true),
       herMood: step.who === 'ruby' ? mood : s.herMood,
       hisMood: step.who === 'claude' ? hisMood : s.hisMood,
       moodAt: now,
     }))
-    await note($, step.who, step.text)
+    await note($, step.who, step.text, { isAside: step.isAside === true })
     if (step.who === 'ruby') lastRubyUnanswered = true
     if (step.who === 'claude') lastRubyUnanswered = false
     await wait($, readingMs(step.text))
@@ -210,7 +211,7 @@ export async function play(
 async function linger($: EngineInterface, run: number): Promise<void> {
   await wait($, SETTINGS.lingerMs)
   if (run !== show.run || show.isPlaying) return
-  await setStage($, s => ({ ...s, lines: [], typing: null, herMood: 'none', hisMood: 'none' }))
+  await setStage($, s => ({ ...s, lines: [], typing: null, herMood: 'none', hisMood: 'none', tone: 'calm' }))
 }
 
 /** Stops whatever is playing and empties the room (the /ship off switch). */

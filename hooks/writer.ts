@@ -19,15 +19,16 @@ export async function write(
   beat: Beat,
   m: Memory,
   nowMs: number,
-  opts: { isArriving: boolean; said: string },
+  opts: { isArriving: boolean; said: string; extra?: string },
 ): Promise<Scene | null> {
   const must = beat in MUST ? MUST[beat as Milestone] : undefined
-  const first = await ask($, askFor(beat, m, nowMs, opts.isArriving, opts.said))
+  const request = askFor(beat, m, nowMs, opts.isArriving, opts.said, opts.extra ?? '')
+  const first = await ask($, request)
 
   // A milestone changes their life for good, so the scene must show it happen.
   if (first === null || must === undefined || happened(first, must.proof)) return first
   $.ui.log(`anthropicship: the ${beat} scene did not happen on the page; asking once more`, { to: 'debug' })
-  const again = await ask($, `${askFor(beat, m, nowMs, opts.isArriving, opts.said)}\n\nThe last draft never got there. ${must.outcome}: say it outright.`)
+  const again = await ask($, `${request}\n\nThe last draft never got there. ${must.outcome}: say it outright.`)
 
   return again !== null && happened(again, must.proof) ? again : null
 }
