@@ -5,9 +5,9 @@
 import type { Beat } from './beats'
 import { DIRECTIONS } from './beats'
 import { clip, facts, rivalOf } from './facts'
-import { chapterOf, dayCount } from './memory'
+import { storySoFar } from './life'
 import type { Memory } from './memory'
-import { localTime } from './time'
+import { localTime, timeContext } from './time'
 
 type Key =
   | 'time' | 'forgot' | 'ignored' | 'interrupts' | 'commits' | 'compactions' | 'working' | 'doing'
@@ -37,6 +37,14 @@ const FACTS_FOR: Readonly<Record<Beat, readonly Key[]>> = {
   leave: [],
   user_says: ['said'],
   summon: [],
+  ask_out: [],
+  move_in: [],
+  propose: [],
+  wedding: [],
+  baby: [],
+  fight: ['working', 'rival'],
+  breakup: ['ignored', 'forgot'],
+  make_up: [],
 }
 
 function factLine(key: Key, m: Memory, nowMs: number, said: string): string | null {
@@ -87,14 +95,14 @@ function factLine(key: Key, m: Memory, nowMs: number, said: string): string | nu
 /** The user message for one scene: who they are now, a fact or two, then the scene to write. */
 export function askFor(beat: Beat, m: Memory, nowMs: number, isArriving: boolean, said: string): string {
   const story = [
-    `Relationship: day ${dayCount(m, nowMs)}, "${chapterOf(m, nowMs)}".`,
+    storySoFar(m.life, nowMs),
     m.petName === null ? '' : `She calls him "${m.petName}" sometimes, not every line.`,
     isArriving ? 'She is not in the room yet: the scene starts with "(ruby arrives)".' : 'She is already in the room.',
   ].filter(Boolean)
   const details = FACTS_FOR[beat]
     .map(key => factLine(key, m, nowMs, said))
     .filter((line): line is string => line !== null)
-  const parts = [story.join(' ')]
+  const parts = [timeContext(nowMs, m.lastTalkMs), story.join(' ')]
 
   if (details.length > 0) parts.push(`A DETAIL YOU MAY USE (optional, once at most):\n- ${details.join('\n- ')}`)
   if (m.lastScene.length > 0) parts.push(`PREVIOUS SCENE (do not repeat its jokes or details):\n${m.lastScene.join('\n')}`)

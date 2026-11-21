@@ -3,13 +3,15 @@
 
 import type { EngineInterface } from 'claude-code'
 
+import { NEW_LIFE } from './life'
+import type { Life } from './life'
 import { DEFAULTS } from './settings'
-import type { Mode, Pace } from './settings'
+import type { Pace } from './settings'
 
 const KEY = 'memory'
 const DAY_MS = 86_400_000
 
-export type Prefs = { mode: Mode; pace: Pace; isPrivate: boolean; isOn: boolean }
+export type Prefs = { pace: Pace; isPrivate: boolean; isOn: boolean }
 
 export type Memory = {
   /** When they first met (epoch ms), 0 before the first session. */
@@ -31,8 +33,12 @@ export type Memory = {
   petName: string | null
   /** The file she was last jealous of. */
   rival: string | null
+  /** When they last talked (epoch ms), so she knows if it was a minute or a day ago. */
+  lastTalkMs: number
   /** The last scene, so the next one can follow on from it. */
   lastScene: string[]
+  /** Their life together: chapter, breakups, kids, and the dated story. */
+  life: Life
   /** How many times each kind of scene has played. */
   seen: Record<string, number>
   prefs: Prefs
@@ -49,7 +55,9 @@ export const FRESH: Memory = {
   liveCount: 0,
   petName: null,
   rival: null,
+  lastTalkMs: 0,
   lastScene: [],
+  life: NEW_LIFE,
   seen: {},
   prefs: { ...DEFAULTS },
 }
@@ -61,7 +69,6 @@ const str = (v: unknown, fallback: string): string => (typeof v === 'string' ? v
 export function revive(raw: unknown): Memory {
   const r = typeof raw === 'object' && raw !== null ? (raw as Record<string, unknown>) : {}
   const p = typeof r.prefs === 'object' && r.prefs !== null ? (r.prefs as Record<string, unknown>) : {}
-  const mode = p.mode === 'scripted' ? 'scripted' : 'live'
   const pace = p.pace === 'calm' || p.pace === 'clingy' ? p.pace : 'normal'
 
   return {
@@ -75,29 +82,29 @@ export function revive(raw: unknown): Memory {
     liveCount: num(r.liveCount, 0),
     petName: typeof r.petName === 'string' ? r.petName : null,
     rival: typeof r.rival === 'string' ? r.rival : null,
+    lastTalkMs: num(r.lastTalkMs, 0),
     lastScene: Array.isArray(r.lastScene) ? r.lastScene.filter((l): l is string => typeof l === 'string').slice(-8) : [],
+    life: reviveLife(r.life),
     seen: typeof r.seen === 'object' && r.seen !== null ? (r.seen as Record<string, number>) : {},
-    prefs: { mode, pace, isPrivate: p.isPrivate === true, isOn: p.isOn !== false },
+    prefs: { pace, isPrivate: p.isPrivate === true, isOn: p.isOn !== false },
+  }
+}
+
+/** Their life as stored, or a new one when it is missing or malformed. */
+function reviveLife(raw: unknown): Life {
+  if (typeof raw !== 'object' || raw === null) return NEW_LIFE
+  const l = raw as Partial<Life>
+
+  return {
+    ...NEW_LIFE,
+    ...l,
+    events: Array.isArray(l.events) ? l.events.filter(e => typeof e?.at === 'number' && typeof e.what === 'string') : [],
   }
 }
 
 /** Days since they met, starting at 1 on the first day. */
 export function dayCount(m: Memory, nowMs: number): number {
   return m.firstMetMs === 0 ? 1 : Math.floor((nowMs - m.firstMetMs) / DAY_MS) + 1
-}
-
-export type Chapter = 'first date' | 'talking' | 'dating' | 'serious' | 'old married couple'
-
-/** Where the relationship stands, from how long and how often. */
-export function chapterOf(m: Memory, nowMs: number): Chapter {
-  const days = dayCount(m, nowMs)
-
-  if (m.sessions <= 1) return 'first date'
-  if (days <= 3) return 'talking'
-  if (days <= 14) return 'dating'
-  if (days <= 45) return 'serious'
-
-  return 'old married couple'
 }
 
 const PET_NAMES = ['babe', 'bug', 'little crab', 'mr. helpful', 'sunshine', 'nerd', 'my agent', 'honey']

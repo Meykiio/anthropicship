@@ -6,7 +6,6 @@ import type { Pixels } from './sprites'
 
 const DEFAULT = 0x01000000
 const UPPER = 0x2580 // ▀
-const LOWER = 0x2584 // ▄
 const FULL = 0x2588 // █
 const SPACE = 0x20
 
@@ -32,73 +31,87 @@ export function toBase64(bytes: Uint8Array): string {
 
 const rgb = (hex: string | null): number => (hex === null ? DEFAULT : Number.parseInt(hex.slice(1), 16))
 
-/** A mark drawn over the top row of cells, such as a heart over a head. */
-export type Mark = { column: number; char: string; color: string }
+/** A sign drawn in the top row of cells, such as a heart over a head. */
+export type Mark = { column: number; char: string; color: string; row?: number }
 
-/** The cells of a Raster: `[codePoint, foreground, background]` per cell. */
-export function rasterCells(map: Pixels, marks: readonly Mark[] = []): { columns: number; rows: number; cells: string } {
-  const columns = map[0]?.length ?? 0
-  const rows = Math.ceil(map.length / 2)
+/** A Raster of a color grid (null is the background), two pixel rows per cell. */
+export function rasterOfGrid(
+  grid: readonly (readonly (string | null)[])[],
+  background: string,
+  marks: readonly Mark[] = [],
+): { columns: number; rows: number; cells: string } {
+  const columns = grid[0]?.length ?? 0
+  const rows = Math.ceil(grid.length / 2)
   const words = new Uint32Array(columns * rows * 3)
+  const bg = rgb(background)
 
   for (let r = 0; r < rows; r += 1) {
     for (let x = 0; x < columns; x += 1) {
-      const top = inkOf(map[r * 2]?.[x] ?? '.')
-      const bottom = inkOf(map[r * 2 + 1]?.[x] ?? '.')
+      const top = grid[r * 2]?.[x] ?? null
+      const bottom = grid[r * 2 + 1]?.[x] ?? null
       const at = (r * columns + x) * 3
-      let cell: [number, number, number]
 
-      if (top === null && bottom === null) cell = [SPACE, DEFAULT, DEFAULT]
-      else if (bottom === null) cell = [UPPER, rgb(top), DEFAULT]
-      else if (top === null) cell = [LOWER, rgb(bottom), DEFAULT]
-      else if (top === bottom) cell = [FULL, rgb(top), DEFAULT]
-      else cell = [UPPER, rgb(top), rgb(bottom)]
-      words.set(cell, at)
+      if (top === bottom) words.set(top === null ? [SPACE, bg, bg] : [FULL, rgb(top), bg], at)
+      else words.set([UPPER, top === null ? bg : rgb(top), bottom === null ? bg : rgb(bottom)], at)
     }
   }
   for (const mark of marks) {
     if (mark.column >= 0 && mark.column < columns) {
-      words.set([mark.char.codePointAt(0) ?? SPACE, rgb(mark.color), DEFAULT], mark.column * 3)
+      const at = ((mark.row ?? 0) * columns + mark.column) * 3
+
+      if (at < words.length) words.set([mark.char.codePointAt(0) ?? SPACE, rgb(mark.color), bg], at)
     }
   }
 
   return { columns, rows, cells: toBase64(new Uint8Array(words.buffer)) }
 }
 
-/** An Svg of the map, `scale` CSS pixels per map pixel, with the marks as text. */
-export function svgOf(map: Pixels, scale: number, marks: readonly Mark[] = []): string {
-  const width = (map[0]?.length ?? 0) * scale
-  const height = map.length * scale
-  const parts: string[] = []
+/** An Svg of a color grid: square pixels, `scale` CSS pixels each, signs as text. */
+export function svgOfGrid(
+  grid: readonly (readonly (string | null)[])[],
+  scale: number,
+  background: string,
+  marks: readonly Mark[] = [],
+): string {
+  const width = (grid[0]?.length ?? 0) * scale
+  const height = grid.length * scale
+  const parts = [`<rect width="${width}" height="${height}" fill="${background}"/>`]
 
-  map.forEach((row, y) => {
+  grid.forEach((row, y) => {
     let x = 0
 
-    // One rect per run of the same color keeps the markup small.
     while (x < row.length) {
-      const ink = inkOf(row[x] ?? '.')
+      const ink = row[x] ?? null
       let end = x + 1
 
-      while (end < row.length && inkOf(row[end] ?? '.') === ink) end += 1
-      if (ink !== null) {
-        parts.push(`<rect x="${x * scale}" y="${y * scale}" width="${(end - x) * scale}" height="${scale}" fill="${ink}"/>`)
-      }
+      while (end < row.length && (row[end] ?? null) === ink) end += 1
+      if (ink !== null) parts.push(`<rect x="${x * scale}" y="${y * scale}" width="${(end - x) * scale}" height="${scale}" fill="${ink}"/>`)
       x = end
     }
   })
-  for (const mark of marks) {
-    const size = scale * 2.4
+  for (const mark of marks) parts.push(markText(mark, scale))
 
-    parts.push(
-      `<text x="${(mark.column + 0.5) * scale}" y="${size * 0.85}" font-size="${size}" text-anchor="middle" ` +
-        `font-family="monospace" fill="${mark.color}">${escapeXml(mark.char)}</text>`,
-    )
-  }
+  return svgDocument(width, height, parts)
+}
+
+function markText(mark: Mark, scale: number): string {
+  const size = scale * 2.4
 
   return (
-    `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" ` +
-    `shape-rendering="crispEdges">${parts.join('')}</svg>`
+    `<text x="${(mark.column + 0.5) * scale}" y="${(mark.row ?? 0) * 2 * scale + size * 0.85}" font-size="${size}" text-anchor="middle" ` +
+    `font-family="monospace" fill="${mark.color}">${escapeXml(mark.char)}</text>`
   )
+}
+
+const svgDocument = (width: number, height: number, parts: readonly string[]): string =>
+  `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" ` +
+  `shape-rendering="crispEdges">${parts.join('')}</svg>`
+
+/** An Svg of one sprite map, for the listing icon. */
+export function svgOf(map: Pixels, scale: number): string {
+  const grid = map.map(row => [...row].map(letter => inkOf(letter)))
+
+  return svgOfGrid(grid, scale, '#0b0b0d')
 }
 
 function escapeXml(text: string): string {

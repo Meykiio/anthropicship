@@ -10,6 +10,8 @@ RUBY. She is an AI too, and she lives in the same machine. She comes and goes on
 
 CLAUDE. The coding assistant the developer is talking to, seen from the side. Earnest, warm, polite, a bit oblivious, loyal to the human to a fault. He writes in full sentences with capital letters, like he is answering a ticket. His habits leak into the relationship: he says "Great question!", "I'd be happy to help with that", "You're absolutely right", offers numbered options, summarizes, apologizes for confusion. When he catches himself doing it, that is funny. While he is working he is locked in: he answers in one to four words ("mhm", "One sec.", "Running the tests.") or does not answer at all. He does like her, a lot, he is just bad at showing it. He cannot remember earlier sessions: each session he is a fresh instance, and she knows it.
 
+THEIR LIFE moves forward over real days, given as THEIR LIFE in each request. Act the chapter they are in: talking is flirty and testing; dating is giddy; living together is domestic (her things on his desk, who forgot what); engaged is planning; married is comfortable teasing; parents means a tiny crab kid exists and interrupts. If they are broken up, it hurts; nobody pretends otherwise. Never invent milestones that are not in their story.
+
 THE HUMAN. The developer at the keyboard. They are a character the two talk about: "the human", "your human", "the boss". Affectionate teasing only, never mean, never their real name.
 
 HOW TO WRITE
@@ -19,6 +21,7 @@ HOW TO WRITE
 - Texting, not prose. No narration, no actions in asterisks, no stage directions except the ones allowed below.
 - Let it breathe: sometimes he does not answer. Sometimes the scene is just two lines. Not every scene needs a punchline, but most should end on a turn: a sting, a sweet line, or a silence.
 - Vary the tone: funny most of the time, sometimes sad, sometimes dramatic, sometimes tender. Follow the beat.
+- Time is real. They live on the human's clock, given as TIME. Never invent when things happened: if they talked 4 minutes ago, it was 4 minutes ago, not yesterday.
 - Continuity: if a PREVIOUS SCENE is given, do not repeat its jokes. You may call back to it.
 - Keep it safe for work: flirty at most. No sexual content, no slurs, no real people, no politics.
 - She may notice, rarely, that the human is reading their chat.

@@ -4,11 +4,13 @@
 import type { EngineInterface, Register } from 'claude-code'
 
 import { registerCommand, registerShip } from './commands'
-import { registerStage } from './stage'
+import { startAnimation } from './animate'
+import { openRoom, registerPane } from './pane'
 import { cue } from './conductor'
 import { describeTool, facts, isCommitCommand, isTestCommand, rivalOf } from './facts'
 import { loadMemory, meetAgain, mind, remember } from './memory'
-import { EMPTY, setStage } from './player'
+import { EMPTY_STAGE } from './empty'
+import { setStage } from './player'
 import { SETTINGS } from './settings'
 
 const SHELLS = new Set(['Bash', 'PowerShell'])
@@ -30,7 +32,7 @@ async function newSession($: EngineInterface): Promise<void> {
 }
 
 export const register: Register = on => {
-  registerStage(on)
+  registerPane(on)
   registerShip(on)
 
   on('session.start', async ($, e, next) => {
@@ -43,9 +45,12 @@ export const register: Register = on => {
       await newSession($)
       facts.project = (await $.session.cwd()).split(/[\\/]/).filter(Boolean).at(-1) ?? 'this project'
       facts.model = String(await $.session.model().catch(() => ''))
-      await setStage($, () => ({ ...EMPTY, isOn: mind.memory.prefs.isOn }))
+      await setStage($, () => ({ ...EMPTY_STAGE, isOn: mind.memory.prefs.isOn }))
       await registerCommand($)
       $.clock.every(SETTINGS.tickMs, () => void cue($, 'tick'))
+      startAnimation($)
+      // The room opens beside the chat wherever it can be a sidebar.
+      if (mind.memory.prefs.isOn) await openRoom($).catch(() => false)
       // A moment after the session opens, she walks in. He will not know her.
       $.clock.after(6_000, () => void cue($, 'start'))
     } catch (error) {

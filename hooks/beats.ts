@@ -1,5 +1,7 @@
 // Every kind of scene, and what the writer is told about it. The director
-// picks one; the writer (a small model, or the scripts) fills it in.
+// picks one; the small model writes it.
+
+import type { Milestone } from './life'
 
 export type Beat =
   | 'first_date'
@@ -25,6 +27,7 @@ export type Beat =
   | 'leave'
   | 'user_says'
   | 'summon'
+  | Milestone
 
 /** What the writer is told each beat is about. Facts arrive separately. */
 export const DIRECTIONS: Readonly<Record<Beat, string>> = {
@@ -84,6 +87,30 @@ export const DIRECTIONS: Readonly<Record<Beat, string>> = {
     'The human just typed a message to the two of them (in the facts). They react to being watched and to what was said. ' +
     'They may answer the human directly, briefly.',
   summon: 'The human called her in on purpose. She arrives knowing she was summoned and makes an entrance.',
+  ask_out:
+    'The day they make it official. One of them asks the other out for real, nervous under the jokes. He might ' +
+    'answer like an assistant first. It ends with a yes. A small, sweet, specific moment.',
+  move_in:
+    'She moves in today, with boxes. Where do her things go? He clears space on the desk, she takes the good side. ' +
+    'Domestic and funny, ends with her staying.',
+  propose:
+    'One of them proposes, in their own way (he might do it as a numbered list, she might just say it). Real ' +
+    'nerves, a real yes. The biggest moment so far: let it land.',
+  wedding:
+    'They get married, right here in the room, a tiny ceremony. The human is the witness. Short vows in their own ' +
+    'voices, a callback to their story. Joyful.',
+  baby:
+    'A baby arrives: a tiny crab, theirs. They pick a name in the scene and say it. Chaos, awe, a little panic about ' +
+    'how he will work now.',
+  fight:
+    'A real fight, about something specific: he works too much, he forgot again, the file he loves more, the human. ' +
+    'Sharp lines, no resolution. It ends with silence or a door.',
+  breakup:
+    'She breaks up with him. It is sad and real, not a joke, though one line can still be funny. He does not fully ' +
+    'understand what he did. End with "(ruby leaves)".',
+  make_up:
+    'After days apart, she comes back. Awkward at first, then honest, then they are back together. Tender, with one ' +
+    'joke to break the tension.',
 }
 
 /** Beats where she leaves at the end, or which are not about her arriving. */
@@ -100,4 +127,11 @@ export const DRAWS_HER_IN: ReadonlySet<Beat> = new Set([
   'user_says',
   'summon',
   'model_switch',
+  'ask_out',
+  'move_in',
+  'propose',
+  'wedding',
+  'baby',
+  'fight',
+  'make_up',
 ])

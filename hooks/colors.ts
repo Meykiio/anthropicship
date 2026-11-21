@@ -1,0 +1,21 @@
+// The room's colors: one dusky coral world.
+
+export const ROOM = {
+  wall: '#19171e',
+  trim: '#24212b',
+  floor: '#2e2a34',
+  frame: '#3d3a46',
+  deskTop: '#7a5341',
+  desk: '#5c3d31',
+  deskLeg: '#3e2a23',
+  lid: '#9aa0a8',
+  glowA: '#d6e8ff',
+  glowB: '#a9c7ee',
+  door: '#6b4536',
+  doorDark: '#4c3027',
+  knob: '#e0b36a',
+  opening: '#0a090d',
+  pot: '#8a5540',
+  leaf: '#4f8a5b',
+  leafDark: '#3c6e47',
+} as const

@@ -1,13 +1,20 @@
-// The band's starting value. Both files that hold the stage atom import it.
+// The room's starting value. Every file that holds the stage atom imports it.
 
 import type { Stage } from '../types'
 
 export const EMPTY_STAGE: Stage = {
   isOn: true,
-  isHere: false,
+  move: 'away',
+  moveAt: 0,
+  his: 'desk',
+  hisMoveAt: 0,
+  bellAt: 0,
   typing: null,
   lines: [],
   herMood: 'none',
   hisMood: 'none',
-  isFacing: false,
+  moodAt: 0,
 }
+
+/** How long she takes to walk from the door to his desk, or back. */
+export const WALK_MS = 3_200

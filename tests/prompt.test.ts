@@ -52,3 +52,15 @@ test('an unknown start time never turns into a giant number', () => {
   expect(askFor('late_reply', memory, NOW, false, '')).toContain('for 1 minutes')
   expect(askFor('human_away', memory, NOW, false, '')).toContain('for 1 minutes')
 })
+
+test('time is real: a few minutes ago is never yesterday', () => {
+  setUp()
+  const recent = askFor('drop_by', { ...memory, lastTalkMs: NOW - 4 * 60_000 }, NOW, true, '')
+
+  expect(recent).toContain('They last talked 4 minutes ago, today.')
+  expect(recent.includes('yesterday at')).toBe(false)
+  const lastNight = askFor('drop_by', { ...memory, lastTalkMs: NOW - 3 * 3_600_000 }, NOW, true, '')
+
+  expect(lastNight).toContain('yesterday at')
+  expect(askFor('drop_by', { ...memory, lastTalkMs: 0 }, NOW, true, '')).toContain('never talked before')
+})

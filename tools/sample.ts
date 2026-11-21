@@ -39,21 +39,28 @@ const memory = {
   commits: 37,
   petName: 'bug',
   lastScene: ['ruby: you smell like node_modules', 'claude: That is not possible.', 'ruby: and yet'],
+  lastTalkMs: now - 7 * 60_000,
+  life: {
+    ...FRESH.life,
+    chapter: 'living together' as const,
+    since: now - 9 * 86_400_000,
+    kids: 0,
+    events: [
+      { at: now - 11 * 86_400_000, what: 'they met' },
+      { at: now - 10 * 86_400_000, what: 'they started dating' },
+      { at: now - 9 * 86_400_000, what: 'she moved in' },
+    ],
+  },
 }
 
 const beats: readonly [Beat, boolean, string][] = [
-  ['reunion', true, ''],
-  ['distract', false, ''],
+  ['propose', false, ''],
+  ['breakup', false, ''],
+  ['make_up', true, ''],
+  ['move_in', true, ''],
+  ['baby', false, ''],
+  ['drop_by', true, ''],
   ['spell', false, ''],
-  ['late_reply', false, ''],
-  ['commit', false, ''],
-  ['rival_file', false, ''],
-  ['interrupted', true, ''],
-  ['late_night', true, ''],
-  ['human_away', false, ''],
-  ['user_says', false, 'can you two keep it down, I am trying to ship'],
-  ['amnesia', false, ''],
-  ['first_date', true, ''],
 ]
 
 for (const [beat, isArriving, said] of beats) {

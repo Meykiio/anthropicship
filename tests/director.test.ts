@@ -21,6 +21,8 @@ const room = (over: Partial<Room> = {}): Room => ({
   hour: 15,
   sessionMs: 60_000,
   isFirstSession: false,
+  isApart: false,
+  due: null,
   played: {},
   ...over,
 })

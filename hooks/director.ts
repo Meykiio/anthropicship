@@ -3,6 +3,7 @@
 // most calls return null, so the moments that do come land.
 
 import type { Beat } from './beats'
+import type { Milestone } from './life'
 import { PACES, SETTINGS } from './settings'
 import type { Pace } from './settings'
 
@@ -40,6 +41,10 @@ export type Room = {
   sessionMs: number
   /** Is this their first session ever? */
   isFirstSession: boolean
+  /** Broken up: she stays away unless asked, or until they make up. */
+  isApart: boolean
+  /** A step in their life that is due now, if any. */
+  due: Milestone | null
   /** Beats already played this session, with counts. */
   played: Readonly<Record<string, number>>
 }
@@ -56,11 +61,14 @@ export function decide(cue: Cue, room: Room, random: () => number): Beat | null 
   // Asked for by the human: always, even mid-scene (the player queues it).
   if (cue === 'say') return 'user_says'
   if (cue === 'summon') return 'summon'
-  if (cue === 'start') return room.isFirstSession ? 'first_date' : 'reunion'
+  if (cue === 'start') return room.isApart ? null : room.isFirstSession ? 'first_date' : 'reunion'
   if (cue === 'cleared') return 'cleared'
   if (cue === 'compact') return 'amnesia'
 
   if (room.isPlaying || room.nowMs - room.lastSceneMs < SETTINGS.sceneGapMs) return null
+  // Their life comes first: a milestone that is due plays at the next quiet moment.
+  if (cue === 'tick' && room.due !== null && !(room.isWorking && room.due !== 'fight')) return room.due
+  if (room.isApart) return null
 
   const chance = (p: number): boolean => random() < p
   const once = (beat: Beat): boolean => (room.played[beat] ?? 0) === 0
@@ -103,7 +111,7 @@ function tick(room: Room, chance: (p: number) => boolean, once: (beat: Beat) => 
     // would waste the best bits.
     if (room.nowMs >= room.leaveAtMs && !lockedIn) return 'leave'
     if (!chance(perTick(pace.chatEveryMin * MIN))) return null
-    if (lockedIn) return chance(0.25) ? 'spell' : 'distract'
+    if (lockedIn) return chance(0.45) ? 'spell' : 'distract'
     if (isAway) return 'human_away'
     if (isLate(room.hour) && once('late_night')) return 'late_night'
     if (room.sessionMs >= 2.5 * 60 * MIN && once('long_session')) return 'long_session'

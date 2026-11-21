@@ -1,7 +1,6 @@
 // Every number that sets the pace of the show, in one place.
 
 export type Pace = 'calm' | 'normal' | 'clingy'
-export type Mode = 'live' | 'scripted'
 
 export const PACES: Readonly<Record<Pace, { visitEveryMin: number; chatEveryMin: number; stayMin: number }>> = {
   // How long she is away on average, how often they talk while she is here,
@@ -29,7 +28,7 @@ export const SETTINGS = {
   model: 'haiku',
   maxTokens: 220,
   modelTimeoutMs: 20_000,
-  /** At most this many model scenes an hour and a day; past that, the scripts play. */
+  /** At most this many model scenes an hour and a day; past that, she stays away. */
   liveScenesPerHour: 12,
   liveScenesPerDay: 120,
 
@@ -40,4 +39,4 @@ export const SETTINGS = {
   typingMaxMs: 2_400,
 } as const
 
-export const DEFAULTS = { mode: 'live' as Mode, pace: 'normal' as Pace, isPrivate: false, isOn: true }
+export const DEFAULTS = { pace: 'normal' as Pace, isPrivate: false, isOn: true }

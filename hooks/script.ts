@@ -101,8 +101,3 @@ export function parseScene(text: string, isStrict: boolean): Scene | null {
 
   return steps.slice(0, MAX_STEPS)
 }
-
-/** Fills {placeholders} from the facts; unknown ones become a plain word. */
-export function fill(template: string, values: Readonly<Record<string, string>>): string {
-  return template.replace(/\{(\w+)\}/g, (_, key: string) => values[key] ?? 'it')
-}

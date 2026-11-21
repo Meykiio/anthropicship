@@ -34,6 +34,7 @@ function host(on: On, stored: Record<string, unknown>, reply: () => ModelReply) 
   on('session.cwd', () => ({ value: '/home/dev/shop' }))
   on('session.model', () => ({ value: 'claude-opus-5-5' }))
   on('command.register', () => ({ value: { command: 'ship' } }))
+  on('ui.open', () => ({ value: { isPlaced: true } }))
   on('ui.log', () => ({ value: undefined }))
   on('model.complete', () => {
     calls.model += 1
@@ -57,102 +58,92 @@ function host(on: On, stored: Record<string, unknown>, reply: () => ModelReply) 
 const run = ($: Engine, args: string) =>
   $.command.run({ command: 'ship', args, origin: { kind: 'composer' }, presentation: { isFullscreen: false, columns: 120 } })
 
-async function bandText($: Engine, surface: 'terminal' | 'desktop'): Promise<string> {
-  const ui = await $.ui.mount({ ...BAND, surface })
-  const shown = (await ui.findAll({ type: 'Text' })).map(t => t.text).join('|')
+async function textOf($: Engine, mount: Parameters<Engine['ui']['mount']>[0]): Promise<{ text: string; rasters: number; svgs: number }> {
+  const ui = await $.ui.mount(mount)
+  const text = (await ui.findAll({ type: 'Text' })).map(t => t.text).join('|')
+  const rasters = (await ui.findAll({ type: 'Raster' })).length
+  const svgs = (await ui.findAll({ type: 'Svg' })).length
 
   await ui.unmount()
 
-  return shown
+  return { text, rasters, svgs }
 }
 
-const scripted = { memory: { prefs: { mode: 'scripted' }, sessions: 4, firstMetMs: NOW - 5 * 86_400_000 } }
+const band = ($: Engine, surface: 'terminal' | 'desktop') => textOf($, { ...BAND, surface })
+const PANE = {
+  plugin: 'anthropicship',
+  component: 'Pane',
+  requestId: 'room',
+  props: { title: 'Claude & Ruby', isFocused: false, bodyColumns: 64, placement: 'dock', scroll: { offset: 0, bodyRows: 30 }, view: {} },
+} as const
+const pane = ($: Engine, surface: 'terminal' | 'desktop') => textOf($, { ...PANE, surface })
 
-test('a returning session opens with her walking in on a stranger', SLOW, async ($, on) => {
-  const { clock, calls } = host(on, scripted, () => ({ isAnswered: true, text: 'ruby: hi' }))
+const reunion = '(ruby arrives)\nruby: you forgot me again\nclaude: I am so sorry. Who are you?'
+const returning = { memory: { sessions: 4, firstMetMs: NOW - 5 * 86_400_000, lastTalkMs: NOW - 3 * 3_600_000 } }
+
+test('she rings, he lets her in, and the panel shows the room and keeps every line', SLOW, async ($, on) => {
+  const { clock, calls } = host(on, returning, () => ({ isAnswered: true, text: reunion }))
 
   await $.session.start({ cwd: '/', surface: 'terminal', isInteractive: true })
-  await clock.advance(20_000)
-  const shown = await bandText($, 'terminal')
-
-  expect(shown).toContain('ruby')
-  expect(calls.model).toBe(0) // scripted mode spends nothing
-  const ui = await $.ui.mount({ ...BAND, surface: 'terminal' })
-
-  expect((await ui.findAll({ type: 'Raster' })).length).toBe(2) // him and her
-  await ui.unmount()
-})
-
-test('live mode plays what the model wrote', SLOW, async ($, on) => {
-  const { clock, calls } = host(on, { memory: { sessions: 4 } }, () => ({
-    isAnswered: true,
-    text: '(ruby arrives)\nruby: you forgot me again\nclaude: I am so sorry. Who are you?',
-  }))
-
-  await $.session.start({ cwd: '/', surface: 'desktop', isInteractive: true })
-  await clock.advance(30_000)
+  await clock.advance(40_000)
   expect(calls.model).toBe(1)
-  const shown = await bandText($, 'desktop')
+  const terminal = await pane($, 'terminal')
 
-  expect(shown).toContain('you forgot me again')
+  expect(terminal.rasters).toBe(1)
+  for (const said of ['ding dong', 'ruby walked in', 'you forgot me again', 'Who are you?']) expect(terminal.text).toContain(said)
+  expect((await pane($, 'desktop')).svgs).toBe(1)
+  // Nothing of theirs in the work area: the band above the prompt is the engine's own.
+  expect((await band($, 'terminal')).text).toBe('engine')
 })
 
-test('a failed model call falls back to a script, and the show goes on', SLOW, async ($, on) => {
-  const { clock, calls } = host(on, { memory: { sessions: 4 } }, () => ({ isAnswered: false, reason: 'api-error' }))
+test('when the model cannot answer, nothing canned plays: she just does not come', SLOW, async ($, on) => {
+  const { clock, calls } = host(on, returning, () => ({ isAnswered: false, reason: 'api-error' }))
 
   await $.session.start({ cwd: '/', surface: 'terminal', isInteractive: true })
-  await clock.advance(30_000)
-  expect(calls.model).toBe(1)
-  expect(await bandText($, 'terminal')).toContain('ruby')
+  await clock.advance(60_000)
+  expect(calls.model).toBeGreaterThan(0)
+  expect((await band($, 'terminal')).text).toBe('engine')
+  expect((await pane($, 'terminal')).text).toContain('Nothing yet')
 })
 
-test('/ship shows the card, /ship off hides the band, /ship on brings it back', SLOW, async ($, on) => {
-  const { clock } = host(on, scripted, () => ({ isAnswered: true, text: 'ruby: hi' }))
+test('/ship shows the card, /ship room opens the room, /ship off hides it all', SLOW, async ($, on) => {
+  const { clock } = host(on, returning, () => ({ isAnswered: true, text: reunion }))
 
   await $.session.start({ cwd: '/', surface: 'terminal', isInteractive: true })
-  await clock.advance(20_000)
+  await clock.advance(16_000)
   const card = (await run($, '')).text ?? ''
 
   expect(card).toContain('Claude & Ruby')
   expect(card).toContain('forgotten her 4 times')
+  expect((await run($, 'room')).text ?? '').toContain('open')
   await run($, 'off')
-  expect(await bandText($, 'terminal')).toBe('engine')
+  expect((await band($, 'terminal')).text).toBe('engine')
+  expect((await run($, 'call')).text ?? '').toContain('/ship on')
   await run($, 'on')
-  expect((await run($, 'demo')).text ?? '').toContain('Playing demo scene')
-  await clock.advance(8_000)
-  expect(await bandText($, 'terminal')).toContain('ruby')
-})
-
-test('the band goes quiet again after a scene, and a narrow terminal keeps only the words', SLOW, async ($, on) => {
-  const { clock } = host(on, scripted, () => ({ isAnswered: true, text: 'ruby: hi' }))
-
-  await $.session.start({ cwd: '/', surface: 'terminal', isInteractive: true })
-  await clock.advance(15_000)
-  const narrow = await $.ui.mount({ ...BAND, props: { ...BAND.props, bodyColumns: 50 }, surface: 'terminal' })
-
-  expect((await narrow.findAll({ type: 'Raster' })).length).toBe(0)
-  await narrow.unmount()
-  await clock.advance(120_000)
-  const shown = await bandText($, 'terminal')
-
-  expect(shown.includes('typing')).toBe(false)
+  expect((await run($, 'call')).text ?? '').not.toContain('/ship on')
 })
 
 test('a session nobody watches (claude -p, scripts) gets no show and spends nothing', SLOW, async ($, on) => {
-  const { clock, calls } = host(on, { memory: { sessions: 4 } }, () => ({ isAnswered: true, text: 'ruby: hi' }))
+  const { clock, calls } = host(on, returning, () => ({ isAnswered: true, text: 'ruby: hi' }))
 
   await $.session.start({ cwd: '/', surface: 'terminal', isInteractive: false })
   await clock.advance(30 * 60_000)
   expect(calls.model).toBe(0)
-  expect(await bandText($, 'terminal')).toBe('engine')
+  expect((await band($, 'terminal')).text).toBe('engine')
 })
 
-test('/ship say puts the human in the scene', SLOW, async ($, on) => {
-  const { clock } = host(on, scripted, () => ({ isAnswered: true, text: 'ruby: hi' }))
+test('/ship say puts the human in the scene and in the log', SLOW, async ($, on) => {
+  const { clock } = host(on, returning, () => ({
+    isAnswered: true,
+    text: 'user: get back to work you two\nruby: they can SEE us??',
+  }))
 
   await $.session.start({ cwd: '/', surface: 'terminal', isInteractive: true })
-  await clock.advance(90_000)
+  await clock.advance(40_000)
   await run($, 'say get back to work you two')
-  await clock.advance(6_000)
-  expect(await bandText($, 'terminal')).toContain('get back to work you two')
+  await clock.advance(40_000)
+  const log = (await pane($, 'terminal')).text
+
+  expect(log).toContain('get back to work you two')
+  expect(log).toContain('they can SEE us??')
 })
