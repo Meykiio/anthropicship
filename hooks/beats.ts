@@ -79,8 +79,8 @@ export const DIRECTIONS: Readonly<Record<Beat, string>> = {
     'faster, more formal. He is not sure who he is either.',
   long_session: 'They have been at it for hours. She suggests a break, brings up water or food, or stretches. He says one more thing first.',
   leave:
-    'She has to go: her cron schedule, plans in /tmp with the daemons, a nap in the cache, anything from her world. ' +
-    'A goodbye with a small sting or a sweet line. End with "(ruby leaves)".',
+    'She has to go: plans with a friend, her sister calling, an errand, a nap, a reason from her own life. ' +
+    'A goodbye with a small sting, a sweet line or a hook for next time. End with "(ruby leaves)".',
   user_says:
     'The human just typed a message to the two of them (in the facts). They react to being watched and to what was said. ' +
     'They may answer the human directly, briefly.',
