@@ -132,3 +132,37 @@ export function drawLife(
     if (life.kids > 1 && at.hisX >= 16) stamp(put, KID, at.hisX - 7, 9)
   }
 }
+
+/**
+ * His laptop, open and facing him: the keyboard under his hands, the screen
+ * raised on the right, glowing toward him. While he types, lines of code
+ * scroll down the screen.
+ */
+export function drawLaptop(put: Put, rect: Rect, x: number, isTyping: boolean, frame: number): void {
+  rect(x - 2, 8, 8, 1, C.keys)
+  put(x + 5, 8, C.lidDark)
+  rect(x + 5, 2, 3, 1, C.lidDark)
+  rect(x + 7, 3, 1, 5, C.lidDark)
+  rect(x + 5, 7, 3, 1, C.lidDark)
+  rect(x + 5, 3, 2, 4, C.glowA)
+  if (isTyping) {
+    // Two lines of code, scrolling.
+    put(x + 5, 3 + (frame % 4), C.code)
+    put(x + 6, 3 + ((frame + 2) % 4), C.code)
+  } else {
+    put(x + 5, 4, C.glowB)
+    put(x + 6, 5, C.glowB)
+  }
+}
+
+/** His coffee, steaming now and then. */
+export function drawMug(put: Put, x: number, frame: number): void {
+  put(x, 7, C.mug)
+  put(x + 1, 7, C.mug)
+  put(x, 8, C.mug)
+  put(x + 1, 8, C.mug)
+  put(x + 2, 7, C.mugDark)
+  put(x, 6, C.coffee)
+  put(x + 1, 6, C.coffee)
+  if (frame % 3 !== 0) put(x + (frame % 2), 5 - (frame % 2), C.steam)
+}

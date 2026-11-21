@@ -10,7 +10,7 @@ import { WALK_MS } from './empty'
 import type { Mark } from './paint'
 import { her, him } from './sprites'
 import { ROOM as C } from './colors'
-import { addMark, drawLife, drawPlant, drawWindow, stamp, stretching, typing, walking } from './room-parts'
+import { addMark, drawLaptop, drawLife, drawMug, drawPlant, drawWindow, stamp, stretching, typing, walking } from './room-parts'
 import type { Gaze } from './sprites'
 
 /** Wall above the scene and floor below it, in pixels: room to breathe on screen. */
@@ -158,14 +158,13 @@ export function drawRoom(v: RoomView): { grid: Grid; marks: Mark[]; overlays: Ov
   if (he.isAtDesk) stamp(put, body, hisX, 1 + jump)
   addMark(marks, s.hisMood, he.x + 3, sinceMood)
 
-  // The desk hides his legs; the laptop faces him.
-  rect(hisX - 1, 9, 25, 1, C.deskTop)
-  rect(hisX, 10, 23, 2, C.desk)
-  rect(hisX, 12, 1, 1, C.deskLeg)
+  // The desk hides his legs; on it, his laptop and his coffee.
+  rect(hisX - 4, 9, 28, 1, C.deskTop)
+  rect(hisX - 3, 10, 26, 2, C.desk)
+  rect(hisX - 3, 12, 1, 1, C.deskLeg)
   rect(hisX + 22, 12, 1, 1, C.deskLeg)
-  rect(laptopX, 8, 6, 1, C.lid)
-  rect(laptopX + 5, 3, 1, 5, C.lid)
-  rect(laptopX + 4, 4, 1, 4, isTyping && v.frame % 2 === 1 ? C.glowB : C.glowA)
+  drawLaptop(put, rect, laptopX, isTypingNow, v.frame)
+  drawMug(put, hisX - 3, v.frame)
   if (!he.isAtDesk) stamp(put, body, he.x, 1 + (he.isWalking && v.frame % 2 === 1 ? 1 : 0))
 
   // Her, walking or standing by the desk.
