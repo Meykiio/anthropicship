@@ -8,8 +8,6 @@ export type Facts = {
   task: string
   isWorking: boolean
   turnStartedMs: number
-  /** Tool calls in the current turn. */
-  toolsThisTurn: number
   /** What he is doing right now, e.g. "editing auth.ts" or "running npm test". */
   doing: string
   /** Failed tool calls in a row. */
@@ -21,9 +19,7 @@ export type Facts = {
   /** Last time the human did anything (typed, sent, a tool ran). */
   lastActivityMs: number
   sessionStartMs: number
-  turns: number
   agents: number
-  searches: number
   model: string
 }
 
@@ -32,16 +28,13 @@ export const facts: Facts = {
   task: '',
   isWorking: false,
   turnStartedMs: 0,
-  toolsThisTurn: 0,
   doing: '',
   failStreak: 0,
   edits: {},
   isWaitingOnHim: false,
   lastActivityMs: 0,
   sessionStartMs: 0,
-  turns: 0,
   agents: 0,
-  searches: 0,
   model: '',
 }
 

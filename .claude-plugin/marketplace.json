@@ -1,6 +1,7 @@
 {
   "name": "anthropicship",
   "owner": { "name": "Meykiio" },
+  "metadata": { "description": "Anthropicship: a pixel girlfriend for Claude, living above the prompt. An unofficial fan mod." },
   "plugins": [
     {
       "name": "anthropicship",

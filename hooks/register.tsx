@@ -25,7 +25,7 @@ async function newSession($: EngineInterface): Promise<void> {
   const nowMs = await $.clock.now()
 
   remember($, m => meetAgain(m, nowMs, Math.random))
-  Object.assign(facts, { sessionStartMs: nowMs, lastActivityMs: nowMs, edits: {}, failStreak: 0, agents: 0, turns: 0 })
+  Object.assign(facts, { sessionStartMs: nowMs, lastActivityMs: nowMs, edits: {}, failStreak: 0, agents: 0 })
   rivalsCued = new Set()
 }
 
@@ -36,6 +36,8 @@ export const register: Register = on => {
   on('session.start', async ($, e, next) => {
     const started = await next(e)
 
+    // Scripts, CI and `claude -p` have nobody watching: no show, no tokens.
+    if (!e.isInteractive) return started
     try {
       await loadMemory($)
       await newSession($)
@@ -68,8 +70,7 @@ export const register: Register = on => {
   on('turn.start', async ($, e, next) => {
     if (e.agentId === undefined) {
       await touch($)
-      Object.assign(facts, { isWorking: true, turnStartedMs: await $.clock.now(), toolsThisTurn: 0, task: e.text, doing: '' })
-      facts.turns += 1
+      Object.assign(facts, { isWorking: true, turnStartedMs: await $.clock.now(), task: e.text, doing: '' })
     }
 
     return next(e)
@@ -140,7 +141,6 @@ async function onTool($: EngineInterface, tool: string, input: unknown, failed: 
   const { doing, file } = describeTool(tool, input)
 
   facts.doing = doing
-  facts.toolsThisTurn += 1
   facts.failStreak = failed ? facts.failStreak + 1 : 0
   if (failed && facts.failStreak === 3) void cue($, 'fail_streak')
 

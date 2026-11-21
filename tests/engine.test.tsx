@@ -138,6 +138,15 @@ test('the band goes quiet again after a scene, and a narrow terminal keeps only 
   expect(shown.includes('typing')).toBe(false)
 })
 
+test('a session nobody watches (claude -p, scripts) gets no show and spends nothing', SLOW, async ($, on) => {
+  const { clock, calls } = host(on, { memory: { sessions: 4 } }, () => ({ isAnswered: true, text: 'ruby: hi' }))
+
+  await $.session.start({ cwd: '/', surface: 'terminal', isInteractive: false })
+  await clock.advance(30 * 60_000)
+  expect(calls.model).toBe(0)
+  expect(await bandText($, 'terminal')).toBe('engine')
+})
+
 test('/ship say puts the human in the scene', SLOW, async ($, on) => {
   const { clock } = host(on, scripted, () => ({ isAnswered: true, text: 'ruby: hi' }))
 

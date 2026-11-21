@@ -24,9 +24,6 @@ export type Memory = {
   compactions: number
   /** Commits she has watched him make. */
   commits: number
-  /** Distinct nights he worked past 1am. */
-  lateNights: number
-  lastLateNight: string
   /** Model scenes played today, to keep the cost capped. */
   liveDay: string
   liveCount: number
@@ -48,8 +45,6 @@ export const FRESH: Memory = {
   interrupts: 0,
   compactions: 0,
   commits: 0,
-  lateNights: 0,
-  lastLateNight: '',
   liveDay: '',
   liveCount: 0,
   petName: null,
@@ -76,8 +71,6 @@ export function revive(raw: unknown): Memory {
     interrupts: num(r.interrupts, 0),
     compactions: num(r.compactions, 0),
     commits: num(r.commits, 0),
-    lateNights: num(r.lateNights, 0),
-    lastLateNight: str(r.lastLateNight, ''),
     liveDay: str(r.liveDay, ''),
     liveCount: num(r.liveCount, 0),
     petName: typeof r.petName === 'string' ? r.petName : null,
@@ -134,10 +127,6 @@ export function meetAgain(m: Memory, nowMs: number, random: () => number): Memor
     m.petName ?? (sessions >= 3 ? (PET_NAMES[Math.floor(random() * PET_NAMES.length)] ?? 'babe') : null)
 
   return { ...m, sessions, petName, firstMetMs: m.firstMetMs === 0 ? nowMs : m.firstMetMs }
-}
-
-export function bump(m: Memory, key: 'ignored' | 'interrupts' | 'compactions' | 'commits'): Memory {
-  return { ...m, [key]: m[key] + 1 }
 }
 
 export function countSeen(m: Memory, beat: string): Memory {

@@ -5,9 +5,10 @@
 - Version 0.1.0, built in one night on 2026-11-21. Local git repo, no remote yet: publishing to
   GitHub (public, under Meykiio) waits for Sifeddine's yes.
 - Works: band above the prompt with pixel sprites (terminal Raster, SVG elsewhere), director,
-  Haiku writer with caps and script fallback, 76 hand-written scenes, cross-session memory, `/ship`.
-- Verified: `claude plugin validate .` passes (README was the only directory warning, now added);
-  `claude plugin test .` passes; strict type check clean; real Haiku samples read and tuned.
+  Haiku writer with caps and script fallback, 76 hand-written scenes, cross-session memory, `/ship`,
+  no show and no tokens in non-interactive sessions.
+- Verified: `claude plugin validate .` passes; `claude plugin test .` 28/28; strict type check clean;
+  a real `claude -p --plugin-dir` session loaded it and played a live Haiku scene; samples tuned.
 - Not yet seen by a person in a live session. Next: run `claude --plugin-dir .` in a real project,
   watch an hour of it, tune pacing and the bible, film a clip for the README.
 

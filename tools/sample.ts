@@ -22,7 +22,6 @@ Object.assign(facts, {
   task: 'the checkout page crashes when the cart is empty, fix it and add a test',
   isWorking: true,
   turnStartedMs: now - 9 * 60_000,
-  toolsThisTurn: 31,
   doing: 'editing CheckoutPage.tsx',
   failStreak: 0,
   edits: { 'CheckoutPage.tsx': 7, 'cart.ts': 2 },

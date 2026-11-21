@@ -51,7 +51,8 @@ async function answer($: EngineInterface, args: string): Promise<string> {
       if (!action.isSure) {
         return 'This wipes everything she remembers: days together, every count, her pet name. /ship breakup sure to do it.'
       }
-      remember($, m => ({ ...FRESH, prefs: m.prefs, sessions: 1, firstMetMs: nowMs }))
+      // The next session is a first date again.
+      remember($, m => ({ ...FRESH, prefs: m.prefs }))
       if (!show.isPlaying && mind.memory.prefs.isOn) {
         show.isPlaying = true
         void perform($, 'leave', breakupScene(), !show.isHere)
