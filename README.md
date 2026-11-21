@@ -20,11 +20,11 @@ Nothing of theirs ever shows up in your own work area. You work; they live next 
 Every scene is written live, from what is really happening in your session. Nothing is canned.
 
 - **The doorbell.** Ruby rings. If Claude is mid-task, he either finishes first while she rings again, impatient, or drops everything and walks to the door.
-- **He forgets her every session.** He is a fresh instance each time. She is not. She keeps count.
+- **He remembers her.** Across days and sessions, their whole story. Pick up any morning and they carry on where they left off.
 - **He is a real boyfriend, with a job.** Warm, dry, a bit of a workaholic. Mid-task it is "one sec, babe" or nothing at all; when the task ends he turns around, too late, and tries to make it up to her. Now and then his work habits slip out ("you're absolutely right") and he catches himself.
 - **Sometimes she wins.** She distracts him, hearts float, he panics and gets back to your task.
 - **You are in it.** Press Esc to cut him off and she is outraged on his behalf. Step away and they gossip about your code. Code at 2am and she wants you in bed.
-- **She notices everything.** The file he keeps editing becomes "the other woman". A commit gets "you commit to code but not to me". Subagents? "you have KIDS??" A compaction wipes his memory mid-relationship. `/clear` is a breakup she did not see coming.
+- **She notices everything.** The file he keeps editing becomes "the other woman". A commit gets "you commit to code but not to me". Subagents? "you have KIDS??" A compaction leaves him foggy on the details. `/clear` wipes his desk, and she makes the most of the free moment.
 - **Time is real.** They live on your clock. If they talked four minutes ago, nobody says "yesterday".
 
 ## They have a life
@@ -56,7 +56,7 @@ claude --plugin-dir path/to/anthropicship
 
 | Command | What it does |
 | --- | --- |
-| `/ship` | Where they are in life: chapter, days, kids, how often he forgot her |
+| `/ship` | Where they are in life: chapter, days, kids, how often he left her on read |
 | `/ship room` | Open the room panel |
 | `/ship call` | Ring the doorbell now |
 | `/ship say <text>` | Say something to them. They will react to being watched |

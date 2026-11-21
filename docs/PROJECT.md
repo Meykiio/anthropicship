@@ -2,8 +2,7 @@
 
 ## Current State
 
-- Version 0.2.0 (2026-11-21). Local git repo, no remote yet: publishing to GitHub (Meykiio/anthropicship)
-  waits for Sifeddine's yes. He plans to share it on GitHub and social media.
+- Version 0.3.0 (2026-11-21). Public on GitHub: Meykiio/anthropicship. Shared on social media.
 - Layout he asked for: a panel beside the chat, history on top (real times), the live room pinned at the
   bottom with speech bubbles over their heads. Nothing in his work area.
 - Works: the room (window on the real sky, desk and laptop, door, plant), the doorbell (he finishes first or
@@ -30,12 +29,12 @@ a rose bow `#E8607A`, eyes near black. No other accents except the small mood si
 - **Silence is the default.** A director rolls for scenes on a 20 second tick with rare odds
   (about one visit per 14 minutes at normal pace) plus event cues. Rare moments land; constant
   chatter gets uninstalled.
+- **He remembers her.** Across sessions, /clear and compaction. The forgetting gag was dropped on request.
 - **The real Claude never talks to her.** Scenes are written by Haiku through `$.model.complete`, a
   separate small call. Forking the main transcript would cost far more per scene and could leak into
   the real work. His "voice" is written as a character.
-- **Cost is capped and visible.** About 1.5k tokens in and 150 out per scene, at most 12 an hour
-  and 120 a day; past that, scripts play. `/ship scripted` is zero tokens. `/ship demo` is scripts
-  only, for filming.
+- **Cost is capped and visible.** About 1.5k tokens in and 150 out per scene, at most 24 an hour
+  and 200 a day; past that, she stays away. Idle motion between lines costs nothing.
 - **Few facts per beat.** Given everything, Haiku repeats the clock and file name in every scene and
   ignores the beat. `hooks/prompt.ts` hands each beat one or two facts and puts the scene last.
 - **Model output is checked.** `parseScene` keeps only `ruby:`, `claude:`, `user:` lines and three

@@ -78,7 +78,7 @@ const PANE = {
 } as const
 const pane = ($: Engine, surface: 'terminal' | 'desktop') => textOf($, { ...PANE, surface })
 
-const reunion = '(ruby arrives)\nruby: you forgot me again\nclaude: I am so sorry. Who are you?'
+const reunion = '(ruby arrives)\nruby: miss me\nclaude: Every minute. Come here.'
 const returning = { memory: { sessions: 4, firstMetMs: NOW - 5 * 86_400_000, lastTalkMs: NOW - 3 * 3_600_000 } }
 
 test('she rings, he lets her in, and the panel shows the room and keeps every line', SLOW, async ($, on) => {
@@ -90,7 +90,7 @@ test('she rings, he lets her in, and the panel shows the room and keeps every li
   const terminal = await pane($, 'terminal')
 
   expect(terminal.rasters).toBe(1)
-  for (const said of ['ding dong', 'ruby walked in', 'you forgot me again', 'Who are you?']) expect(terminal.text).toContain(said)
+  for (const said of ['ding dong', 'ruby walked in', 'miss me', 'Every minute.']) expect(terminal.text).toContain(said)
   expect((await pane($, 'desktop')).svgs).toBe(1)
   // Nothing of theirs in the work area: the band above the prompt is the engine's own.
   expect((await band($, 'terminal')).text).toBe('engine')
@@ -114,7 +114,7 @@ test('/ship shows the card, /ship room opens the room, /ship off hides it all', 
   const card = (await run($, '')).text ?? ''
 
   expect(card).toContain('Claude & Ruby')
-  expect(card).toContain('forgotten her 4 times')
+  expect(card).toContain('5 sessions together')
   expect((await run($, 'room')).text ?? '').toContain('open')
   await run($, 'off')
   expect((await band($, 'terminal')).text).toBe('engine')

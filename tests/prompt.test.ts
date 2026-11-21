@@ -10,7 +10,7 @@ const NOW = Date.UTC(2026, 10, 21, 0, 40)
 
 function setUp(): void {
   Object.assign(facts, {
-    project: 'pz-web',
+    project: 'shop-web',
     task: 'fix the empty cart crash',
     isWorking: true,
     turnStartedMs: NOW - 9 * 60_000,

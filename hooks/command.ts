@@ -77,7 +77,7 @@ export function statusCard(m: Memory, nowMs: number, liveThisHour: number): stri
 
   return [
     `${lifeLine(m, nowMs)}${m.petName === null ? '' : `. She calls him "${m.petName}".`}`,
-    `He has forgotten her ${times(Math.max(0, m.sessions - 1))}. He left her on read ${times(m.ignored)}.`,
+    `${m.sessions} sessions together. He left her on read ${times(m.ignored)}.`,
     `The human cut him off ${times(m.interrupts)}. She has watched ${m.commits} commits and ${times(m.compactions)} his memory got compacted.`,
     `Scenes written by ${SETTINGS.model}: ${scenes}. Pace: ${p.pace}. Private: ${p.isPrivate ? 'on' : 'off'}. Show: ${p.isOn ? 'on' : 'off'}.`,
     'Try /ship room, /ship call, or /ship help.',

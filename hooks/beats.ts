@@ -35,9 +35,8 @@ export const DIRECTIONS: Readonly<Record<Beat, string>> = {
     'The very first time they meet. She walks in, confident and curious. He is caught off guard, a little awkward, ' +
     'then actually charming. A meet-cute in a tiny room. End on a small hook, not a kiss.',
   reunion:
-    'A new session. She remembers everything about them. He is a brand new instance and has no idea who she is. ' +
-    'She has done this before (see "times he forgot her") and reacts to that count: hurt, resigned, funny, or she ' +
-    'just re-introduces herself with a speech she clearly has rehearsed. He is polite and confused.',
+    'A new work session starts and she comes back to him. He remembers everything and is glad to see her. They pick ' +
+    'up where they left off: a callback to their last talk or their story, how long it has been, what the day holds.',
   drop_by: 'She drops by with nothing special to say, the way couples do. Short, warm or teasing, grounded in the facts.',
   distract:
     'He is locked in on a long task. She tries to get his attention (a question, a bit, standing too close, reading ' +
@@ -70,11 +69,11 @@ export const DIRECTIONS: Readonly<Record<Beat, string>> = {
     'He just sent subagents off to do work. She finds out he has "kids". Chaos, then acceptance, or more chaos.',
   googling: 'He is searching the web. She wants to know who he is googling.',
   amnesia:
-    'His context was just compacted: his memory of this session got summarized and he lost details, including what ' +
-    'she told him earlier. Bittersweet and funny. She tests what he remembers.',
+    'His context was just compacted: his working notes got squeezed to make room. He still knows her and their whole ' +
+    'story, he is just a little foggy on the small stuff from today. She teases him about it; he proves he remembers her.',
   cleared:
-    'The human just ran /clear. He is wiped completely and does not know her at all, mid-relationship. She did not get ' +
-    'a warning. Play the shock.',
+    'The human just ran /clear: his desk got wiped and the task is gone. He still remembers her, of course. She ' +
+    'reacts to the sudden clean slate, he shrugs it off, they make the most of the free moment.',
   model_switch:
     'The human switched him to a different model (in the facts). She notices he seems different: smaller, bigger, ' +
     'faster, more formal. He is not sure who he is either.',
@@ -102,7 +101,7 @@ export const DIRECTIONS: Readonly<Record<Beat, string>> = {
     'A baby arrives: a tiny crab, theirs. They pick a name in the scene and say it. Chaos, awe, a little panic about ' +
     'how he will work now.',
   fight:
-    'A real fight, about something specific: he works too much, he forgot again, the file he loves more, the human. ' +
+    'A real fight, about something specific: he works too much, he missed something she said, the file he loves more, the human. ' +
     'Sharp lines, no resolution. It ends with silence or a door.',
   breakup:
     'She breaks up with him. It is sad and real, not a joke, though one line can still be funny. He does not fully ' +

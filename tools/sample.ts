@@ -18,7 +18,7 @@ mkdirSync(dir, { recursive: true })
 writeFileSync(`${dir}/bible.txt`, BIBLE)
 
 Object.assign(facts, {
-  project: 'pz-web',
+  project: 'shop-web',
   task: 'the checkout page crashes when the cart is empty, fix it and add a test',
   isWorking: true,
   turnStartedMs: now - 9 * 60_000,

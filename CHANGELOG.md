@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.3.0 (2026-11-21), first public release
+
+- Speech bubbles inside the room, over each speaker, with typing dots.
+- Claude is a real boyfriend, not a support bot, and he remembers her: across sessions, /clear and compaction.
+- Life between lines: she wanders and reads over his shoulder, he stretches and glances at her.
+- A real laptop with code scrolling on its screen, and a steaming coffee mug.
+- They talk more while she is in: caps raised to 24 scenes an hour and 200 a day.
+- Verified: `claude plugin test .` 36 pass; `claude plugin validate .` passes; gitleaks finds no leaks.
+
+
 ## 0.2.0 (2026-11-21), the room
 
 Completed

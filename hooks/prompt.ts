@@ -11,12 +11,12 @@ import type { Memory } from './memory'
 import { localTime, shortTime, timeContext } from './time'
 
 type Key =
-  | 'time' | 'forgot' | 'ignored' | 'interrupts' | 'commits' | 'compactions' | 'working' | 'doing'
+  | 'time' | 'last' | 'ignored' | 'interrupts' | 'commits' | 'compactions' | 'working' | 'doing'
   | 'fails' | 'rival' | 'agents' | 'task' | 'model' | 'said' | 'project' | 'away'
 
 const FACTS_FOR: Readonly<Record<Beat, readonly Key[]>> = {
   first_date: ['project'],
-  reunion: ['forgot'],
+  reunion: ['last'],
   drop_by: ['doing'],
   distract: ['working', 'doing'],
   spell: ['working', 'task'],
@@ -44,7 +44,7 @@ const FACTS_FOR: Readonly<Record<Beat, readonly Key[]>> = {
   wedding: [],
   baby: [],
   fight: ['working', 'rival'],
-  breakup: ['ignored', 'forgot'],
+  breakup: ['ignored'],
   make_up: [],
 }
 
@@ -58,8 +58,8 @@ function factLine(key: Key, m: Memory, nowMs: number, said: string): string | nu
   switch (key) {
     case 'time':
       return `the human's local time is ${t.text} on a ${t.weekday}`
-    case 'forgot':
-      return `he has forgotten her ${Math.max(1, m.sessions - 1)} times now (once per new session)`
+    case 'last':
+      return m.lastScene.length > 0 ? `the last thing they said to each other: "${clip(m.lastScene.at(-1) ?? '', 100)}"` : null
     case 'ignored':
       return `he has left her on read ${Math.max(1, m.ignored)} times in total`
     case 'interrupts':
@@ -105,7 +105,9 @@ export function askFor(beat: Beat, m: Memory, nowMs: number, isArriving: boolean
     .filter((line): line is string => line !== null)
   const memoryNote =
     beat === 'reunion' || beat === 'first_date'
-      ? 'NEW SESSION: he is a fresh instance and does not remember her yet. This is the only scene where he forgets.'
+      ? beat === 'first_date'
+        ? 'FIRST MEETING: they are strangers. This is the only scene where he does not know her.'
+        : 'NEW SESSION: he remembers her and everything about them, and is glad she is back.'
       : facts.firstTalkMs > 0
         ? `THIS SESSION: they have been together since ${shortTime(facts.firstTalkMs)}. He knows exactly who she is and remembers everything said today.`
         : 'He knows exactly who she is.'
